@@ -51,7 +51,7 @@ final class ParticipantFactory extends ModelFactory
             'uuid' => Uuid::v6(),
             'user' => UserFactory::new(),
             'event' => EventFactory::new(),
-            'role' => self::faker()->text(255),
+            'role' => self::faker()->word(),
         ];
     }
 

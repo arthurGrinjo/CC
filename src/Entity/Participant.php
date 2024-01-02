@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Enum\ParticipantRole;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping\Column;
@@ -12,30 +12,24 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: ParticipantRepository::class)]
-#[ApiResource]
-class Participant
+class Participant implements EntityInterface
 {
     use IdentifiableEntity;
 
-    #[Column(length: 255)]
-    private ?string $role = null;
-
-    #[ManyToOne]
-    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ManyToOne(targetEntity: User::class, cascade: ['remove'])]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false)]
     private ?User $User = null;
 
-    #[ManyToOne(inversedBy: 'participants')]
-    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ManyToOne(targetEntity: Event::class, cascade: ['remove'], inversedBy: 'participants')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false)]
     private ?Event $Event = null;
+
+    #[Column(length: 255)]
+    private ?ParticipantRole $role = null;
 
     public function __construct()
     {
         $this->uuid = Uuid::v6();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getUser(): ?User
@@ -62,15 +56,14 @@ class Participant
         return $this;
     }
 
-    public function getRole(): ?string
+    public function getRole(): ?ParticipantRole
     {
         return $this->role;
     }
 
-    public function setRole(string $role): static
+    public function setRole(?ParticipantRole $role): Participant
     {
         $this->role = $role;
-
         return $this;
     }
 }
