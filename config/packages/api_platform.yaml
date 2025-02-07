@@ -16,6 +16,3 @@ api_platform:
     html: ['text/html']
   resource_class_directories:
     - '%kernel.project_dir%/src/Entity'
-  extra_properties:
-    standard_put: true
-    rfc_7807_compliant_errors: true
