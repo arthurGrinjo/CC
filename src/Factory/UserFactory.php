@@ -59,7 +59,7 @@ final class UserFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            ->afterInstantiate(function(User $user) {
+            ->afterInstantiate(function(User $user): void {
                 $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
             })
         ;
