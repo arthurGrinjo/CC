@@ -6,6 +6,9 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Dto\Event\Event;
 use App\Dto\Participant\Response\ParticipantResponse;
 use App\Dto\Response;
+use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [],
@@ -14,48 +17,10 @@ use App\Dto\Response;
 class EventResponse implements Response
 {
     public function __construct(
-        private string $uuid,
-        private string $name,
-    ){
-        $this
-            ->setId($uuid)
-            ->setName($name)
-        ;
-    }
+        #[SerializedName('id'), Assert\NotBlank]
+        public Uuid $uuid,
 
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @param string $uuid
-     * @return EventResponse
-     */
-    public function setId(string $uuid): static
-    {
-        $this->uuid = $uuid;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return EventResponse
-     */
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-        return $this;
-    }
+        #[SerializedName('name'), Assert\NotBlank]
+        public string $name,
+    ) {}
 }

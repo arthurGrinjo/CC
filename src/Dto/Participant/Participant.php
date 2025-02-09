@@ -19,7 +19,7 @@ use App\Validation\RegexValidations;
     stateOptions: new Options(entityClass: ParticipantEntity::class)
 )]
 #[GetCollection(
-    uriTemplate: '/' . self::ROUTE,
+//    uriTemplate: '/' . self::ROUTE,
     paginationItemsPerPage: 30,
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,

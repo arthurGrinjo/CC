@@ -7,6 +7,10 @@ use App\Dto\Event\Response\EventResponse;
 use App\Dto\Participant\Participant;
 use App\Dto\Response;
 use App\Dto\User\Response\UserResponse;
+use App\Entity\Enum\ParticipantRole;
+use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ApiResource(
@@ -16,88 +20,16 @@ use App\Dto\User\Response\UserResponse;
 class ParticipantResponse implements Response
 {
     public function __construct(
-        private string        $uuid,
-        private string        $role,
-        private UserResponse  $user,
-        private EventResponse $event,
-    ){
-        $this
-            ->setId($uuid)
-            ->setRole($role)
-            ->setUserResponse($user)
-            ->setEventResponse($event)
-        ;
-    }
+        #[SerializedName('id'), Assert\NotBlank]
+        public Uuid $uuid,
 
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->uuid;
-    }
+        #[SerializedName('role'), Assert\NotBlank]
+        public ParticipantRole $role,
 
-    /**
-     * @param string $uuid
-     * @return ParticipantResponse
-     */
-    public function setId(string $uuid): static
-    {
-        $this->uuid = $uuid;
-        return $this;
-    }
+        #[SerializedName('user'), Assert\NotBlank]
+        public UserResponse $user,
 
-    /**
-     * @return string
-     */
-    public function getRole(): string
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param string $role
-     * @return ParticipantResponse
-     */
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
-        return $this;
-    }
-
-    /**
-     * @return UserResponse
-     */
-    public function getUserResponse(): UserResponse
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param UserResponse $user
-     * @return ParticipantResponse
-     */
-    public function setUserResponse(UserResponse $user): static
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * @return EventResponse
-     */
-    public function getEventResponse(): EventResponse
-    {
-        return $this->event;
-    }
-
-    /**
-     * @param EventResponse $event
-     * @return ParticipantResponse
-     */
-    public function setEventResponse(EventResponse $event): static
-    {
-        $this->event = $event;
-        return $this;
-    }
+        #[SerializedName('event'), Assert\NotBlank]
+        public EventResponse $event,
+    ) {}
 }

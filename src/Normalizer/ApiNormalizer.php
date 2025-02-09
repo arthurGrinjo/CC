@@ -10,16 +10,17 @@ use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[AsDecorator('api_platform.jsonld.normalizer.item')]
-class ApiNormalizer implements NormalizerInterface, SerializerAwareInterface
+readonly class ApiNormalizer implements NormalizerInterface, SerializerAwareInterface
 {
     public function __construct(
-        private readonly NormalizerInterface $normalizer,
+        private NormalizerInterface $normalizer,
     ) {
     }
 
     public function normalize($object, $format = null, array $context = []): float|array|ArrayObject|bool|int|string|null
     {
-        $data = $this->normalizer->normalize($object, $format, $context);
+        dd('test');
+        $this->normalizer->normalize($object, $format, $context);
 
         foreach ($data as $key => $value) {
             $obj = null;
