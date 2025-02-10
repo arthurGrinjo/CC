@@ -4,6 +4,8 @@ namespace App\Mapper;
 
 use App\Dto\Response;
 use App\Entity\EntityInterface;
+use App\Entity\Participant;
+use App\Entity\User;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use ReflectionClass;
 use ReflectionException;
@@ -24,17 +26,25 @@ class Mapper
         foreach ($responseDto->getConstructor()->getParameters() as $property) {
             $func = 'get' . ucfirst($property->name);
 
+            if (!method_exists($entity, $func)) {
+                $func = 'is' . ucfirst($property->name);
+            }
+
+            if (method_exists($entity, $func) === false) {
+                throw new InvalidMagicMethodCall(
+                    sprintf('Could not find getMethod for: %s', $property->getName())
+                );
+            }
+
             if (
                 $property->getType()->isBuiltin() === false
                 && (new ReflectionClass($property->getType()->getName()))->implementsInterface(Response::class)
             ) {
-                $construct[] = $this->toDto(output: $property->getType()->getName(), entity: $entity->$func());
+                $construct[] = $this->toDto(
+                    output: $property->getType()->getName(),
+                    entity: $entity->$func()
+                );
                 continue;
-            }
-
-            /** todo: check if this can be removed */
-            if (method_exists($entity, $func) === false) {
-                throw new InvalidMagicMethodCall('Could not find setterMethod: ' . $func);
             }
 
             $construct[] = $entity->$func();

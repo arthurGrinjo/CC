@@ -21,7 +21,6 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'user',
     input: UserRequest::class,
     provider: Provider::class,
     stateOptions: new Options(entityClass: UserEntity::class)
@@ -57,5 +56,4 @@ use App\Validation\RegexValidations;
     output: ResetPasswordResponse::class,
     processor: ResetPassword::class,
 )]
-final class User {
-}
+final readonly class User {}

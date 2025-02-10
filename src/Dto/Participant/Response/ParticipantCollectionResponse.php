@@ -2,9 +2,7 @@
 
 namespace App\Dto\Participant\Response;
 
-use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Event\Response\EventResponse;
-use App\Dto\Participant\Participant;
+use App\Dto\Event\Response\EventCollectionResponse;
 use App\Dto\Response;
 use App\Dto\User\Response\UserResponse;
 use App\Entity\Enum\ParticipantRole;
@@ -12,12 +10,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
-#[ApiResource(
-    operations: [],
-    routePrefix: Participant::ROUTE,
-)]
-class ParticipantResponse implements Response
+final readonly class ParticipantCollectionResponse implements Response
 {
     public function __construct(
         #[SerializedName('id'), Assert\NotBlank]
@@ -30,6 +23,6 @@ class ParticipantResponse implements Response
         public UserResponse $user,
 
         #[SerializedName('event'), Assert\NotBlank]
-        public EventResponse $event,
+        public EventCollectionResponse $event,
     ) {}
 }
