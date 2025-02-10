@@ -1,34 +1,29 @@
 <?php
 
-namespace App\Dto\User\Response;
+namespace App\Dto\Event\Response;
 
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\Response;
-use App\Entity\Enum\UserRole;
-use App\Entity\User;
+use App\Entity\Event;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'user',
+    shortName: 'event',
     operations: [],
-    stateOptions: new Options(entityClass: User::class),
+    stateOptions: new Options(entityClass: Event::class),
 )]
-final readonly class UserResponse implements Response
+final readonly class EventCollectionResponse implements Response
 {
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(identifier: true)]
         public Uuid $uuid,
 
-        #[SerializedName('email'), Assert\NotBlank]
-        public string $email,
-
-        /** @var array<UserRole> $roles */
-        #[SerializedName('roles'), Assert\NotBlank]
-        public array $roles,
+        #[SerializedName('name'), Assert\NotBlank]
+        public string $name,
     ) {}
 }

@@ -20,7 +20,7 @@ class Event implements EntityInterface
     #[Column(type: Types::TEXT, length: 180)]
     private string $name;
 
-    #[OneToMany(mappedBy: 'Event', targetEntity: Participant::class, cascade: ['persist'])]
+    #[OneToMany(mappedBy: 'event', targetEntity: Participant::class, cascade: ['persist'], fetch: 'LAZY')]
     private Collection $participants;
 
     public function __construct()

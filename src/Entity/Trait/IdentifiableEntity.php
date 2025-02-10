@@ -28,11 +28,5 @@ trait IdentifiableEntity
     {
         return $this->uuid;
     }
-
-    public function setUuid(Uuid $uuid): self
-    {
-        $this->uuid = $uuid;
-        return $this;
-    }
 }
 
