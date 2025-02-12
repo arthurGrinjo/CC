@@ -6,7 +6,7 @@ api_platform:
     cache_headers:
       vary: [ 'Content-Type', 'Authorization', 'Origin' ]
   mapping:
-    paths: ['%kernel.project_dir%/src/Dto']
+    paths: ['%kernel.project_dir%/src/Dto','%kernel.project_dir%/src/ApiResource']
   formats:
     jsonld: ['application/ld+json']
     json: [ 'application/json' ]

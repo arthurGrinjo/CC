@@ -14,49 +14,46 @@ use ArrayIterator;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use ReflectionException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class Provider implements ProviderInterface
+final readonly class Provider implements ProviderInterface
 {
     public function __construct(
-        private readonly CollectionProvider $collectionProvider,
-        private readonly ItemProvider $itemProvider,
-        private readonly Mapper $mapper,
-    ){}
-
-    /**
-     * {@inheritDoc}
-     * @throws EntityNotFoundException|ReflectionException
-     * @throws InvalidMagicMethodCall
-     */
+        #[Autowire(service: CollectionProvider::class)] private ProviderInterface $collectionProvider
+    ) {}
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        $entity = $operation->getStateOptions()->getEntityClass();
-        $output = $operation->getOutput();
-
-        if ($operation instanceof CollectionOperationInterface) {
-            $objects = $this->collectionProvider->provide($operation, $uriVariables, $context);
-
-            $data = [];
-            foreach ($objects as $object) {
-                $data[] = ($object instanceof $entity)
-                    ? $this->mapper->toDto(output: $output['class'], entity: $object)
-                    : throw new EntityNotFoundException($operation->getShortName() . ' does not exist');
-            }
-
-            return ($objects instanceof Paginator)
-                ? new TraversablePaginator(
-                    new ArrayIterator($data),
-                    $objects->getCurrentPage(),
-                    $objects->getItemsPerPage(),
-                    $objects->getTotalItems(),
-                )
-                : $data;
-        }
-
-        $object = $this->itemProvider->provide($operation, $uriVariables, $context);
-
-        return $object instanceof $entity
-            ? $this->mapper->toDto(output: $output['class'], entity: $object)
-            : throw new EntityNotFoundException($operation->getShortName() . ' does not exist');
+        $entities = $this->collectionProvider->provide($operation, $uriVariables, $context);
+        return $entities;
     }
 }
+//        $entity = $operation->getStateOptions()->getEntityClass();
+//        $output = $operation->getOutput();
+//
+//        if ($operation instanceof CollectionOperationInterface) {
+//            $objects = $this->collectionProvider->provide($operation, $uriVariables, $context);
+//
+//            $data = [];
+//            foreach ($objects as $object) {
+//                $data[] = ($object instanceof $entity)
+//                    ? $this->mapper->toDto(output: $output['class'], entity: $object)
+//                    : throw new EntityNotFoundException($operation->getShortName() . ' does not exist');
+//            }
+//
+//            return ($objects instanceof Paginator)
+//                ? new TraversablePaginator(
+//                    new ArrayIterator($data),
+//                    $objects->getCurrentPage(),
+//                    $objects->getItemsPerPage(),
+//                    $objects->getTotalItems(),
+//                )
+//                : $data;
+//        }
+//
+//        $object = $this->itemProvider->provide($operation, $uriVariables, $context);
+//
+//        return $object instanceof $entity
+//            ? $this->mapper->toDto(output: $output['class'], entity: $object)
+//            : throw new EntityNotFoundException($operation->getShortName() . ' does not exist');
+//    }
+//}

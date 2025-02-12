@@ -16,7 +16,6 @@ trait IdentifiableEntity
     private ?int $id;
 
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ApiProperty(identifier: true)]
     private Uuid $uuid;
 
     public function getId(): ?int
@@ -27,12 +26,6 @@ trait IdentifiableEntity
     public function getUuid(): Uuid
     {
         return $this->uuid;
-    }
-
-    public function setUuid(Uuid $uuid): self
-    {
-        $this->uuid = $uuid;
-        return $this;
     }
 }
 
