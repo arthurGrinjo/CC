@@ -11,7 +11,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        EventFactory::createMany(60);
+        EventFactory::createMany(5);
     }
 
     public function getDependencies(): array

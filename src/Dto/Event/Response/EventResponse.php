@@ -2,60 +2,28 @@
 
 namespace App\Dto\Event\Response;
 
+use ApiPlatform\Doctrine\Orm\State\Options;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Event\Event;
-use App\Dto\Participant\Response\ParticipantResponse;
 use App\Dto\Response;
+use App\Entity\Event;
+use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    shortName: 'event',
     operations: [],
-    routePrefix: Event::ROUTE,
+    stateOptions: new Options(entityClass: Event::class),
 )]
-class EventResponse implements Response
+final readonly class EventResponse implements Response
 {
     public function __construct(
-        private string $uuid,
-        private string $name,
-    ){
-        $this
-            ->setId($uuid)
-            ->setName($name)
-        ;
-    }
+        #[SerializedName('uuid'), Assert\NotBlank]
+        #[ApiProperty(identifier: true)]
+        public Uuid $uuid,
 
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @param string $uuid
-     * @return EventResponse
-     */
-    public function setId(string $uuid): static
-    {
-        $this->uuid = $uuid;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return EventResponse
-     */
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-        return $this;
-    }
+        #[SerializedName('name'), Assert\NotBlank]
+        public string $name,
+    ) {}
 }

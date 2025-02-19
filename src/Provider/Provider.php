@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
+use App\Entity\Event;
 use App\Mapper\Mapper;
 use ArrayIterator;
 use Doctrine\ORM\EntityNotFoundException;
@@ -34,9 +35,9 @@ final class Provider implements ProviderInterface
         $output = $operation->getOutput();
 
         if ($operation instanceof CollectionOperationInterface) {
+            $data = [];
             $objects = $this->collectionProvider->provide($operation, $uriVariables, $context);
 
-            $data = [];
             foreach ($objects as $object) {
                 $data[] = ($object instanceof $entity)
                     ? $this->mapper->toDto(output: $output['class'], entity: $object)

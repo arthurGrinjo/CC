@@ -16,13 +16,13 @@ class Participant implements EntityInterface
 {
     use IdentifiableEntity;
 
-    #[ManyToOne(targetEntity: User::class, cascade: ['remove'])]
+    #[ManyToOne(targetEntity: User::class, cascade: ['remove'], fetch: 'EAGER')]
     #[JoinColumn(referencedColumnName: 'id', nullable: false)]
-    private ?User $User = null;
+    private User $user;
 
-    #[ManyToOne(targetEntity: Event::class, cascade: ['remove'], inversedBy: 'participants')]
+    #[ManyToOne(targetEntity: Event::class, cascade: ['remove'], fetch: 'EAGER', inversedBy: 'participants')]
     #[JoinColumn(referencedColumnName: 'id', nullable: false)]
-    private ?Event $Event = null;
+    private Event $event;
 
     #[Column(length: 255)]
     private ?ParticipantRole $role = null;
@@ -34,24 +34,24 @@ class Participant implements EntityInterface
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getEvent(): ?Event
     {
-        return $this->Event;
+        return $this->event;
     }
 
-    public function setEvent(?Event $Event): static
+    public function setEvent(?Event $event): static
     {
-        $this->Event = $Event;
+        $this->event = $event;
 
         return $this;
     }
