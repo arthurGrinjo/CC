@@ -20,7 +20,7 @@ final readonly class UserCollectionResponse implements Response
 {
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
-        #[ApiProperty(identifier: true)]
+        #[ApiProperty(readable: false, identifier: true)]
         public Uuid $uuid,
 
         #[SerializedName('email'), Assert\NotBlank]

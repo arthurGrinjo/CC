@@ -2,14 +2,13 @@
 
 namespace App\Dto\Participant\Response;
 
+use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Event\Response\EventResponse;
 use App\Dto\Response;
 use App\Dto\User\Response\UserResponse;
 use App\Entity\Enum\ParticipantRole;
 use App\Entity\Participant;
-use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,9 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     shortName: 'participant',
     operations: [],
+    stateOptions: new Options(entityClass: Participant::class),
 )]
-#[Map(source: Participant::class)]
-final readonly class ParticipantCollectionResponse implements Response
+final readonly class EventParticipantCollectionResponse implements Response
 {
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
@@ -30,9 +29,7 @@ final readonly class ParticipantCollectionResponse implements Response
         public ParticipantRole $role,
 
         #[SerializedName('user'), Assert\NotBlank]
+        #[ApiProperty(readableLink: true)]
         public UserResponse $user,
-
-        #[SerializedName('event'), Assert\NotBlank]
-        public EventResponse $event,
     ) {}
 }

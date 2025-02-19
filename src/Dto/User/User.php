@@ -17,9 +17,6 @@ use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'user',
-    paginationClientEnabled: true,
-    paginationClientItemsPerPage: true,
-    paginationItemsPerPage: 5,
     provider: Provider::class,
     stateOptions: new Options(entityClass: UserEntity::class),
 )]
@@ -27,7 +24,6 @@ use App\Validation\RegexValidations;
     output: UserCollectionResponse::class,
 )]
 #[Get(
-    uriTemplate: '/users/{uuid}',
     uriVariables: [
         'uuid' => new Link(fromClass: UserEntity::class, identifiers: ['uuid']),
     ],
@@ -35,14 +31,5 @@ use App\Validation\RegexValidations;
         'uuid' => RegexValidations::REGEX_UUID,
     ],
     output: UserResponse::class,
-)]
-#[Post]
-#[Delete(
-    uriVariables: [
-        'uuid' => new Link(fromClass: UserEntity::class, identifiers: ['uuid']),
-    ],
-    requirements: [
-        'uuid' => RegexValidations::REGEX_UUID,
-    ],
 )]
 final readonly class User {}
