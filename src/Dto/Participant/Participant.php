@@ -43,7 +43,6 @@ use App\Validation\RegexValidations;
     requirements: [
         'uuid' => RegexValidations::REGEX_UUID,
     ],
-    shortName: 'event',
     output: EventParticipantCollectionResponse::class,
 )]
 final readonly class Participant {}

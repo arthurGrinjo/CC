@@ -2,13 +2,13 @@
 
 namespace App\Dto\User;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
-use ApiPlatform\Metadata\Post;
 use App\Dto\User\Response\UserCollectionResponse;
 use App\Dto\User\Response\UserResponse;
 use App\Entity\User as UserEntity;
@@ -20,6 +20,9 @@ use App\Validation\RegexValidations;
     provider: Provider::class,
     stateOptions: new Options(entityClass: UserEntity::class),
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'email' => 'partial',
+])]
 #[GetCollection(
     output: UserCollectionResponse::class,
 )]

@@ -9,19 +9,18 @@ use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
-use App\Entity\Event;
 use App\Mapper\Mapper;
 use ArrayIterator;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use ReflectionException;
 
-final class Provider implements ProviderInterface
+final readonly class Provider implements ProviderInterface
 {
     public function __construct(
-        private readonly CollectionProvider $collectionProvider,
-        private readonly ItemProvider $itemProvider,
-        private readonly Mapper $mapper,
+        private CollectionProvider $collectionProvider,
+        private ItemProvider       $itemProvider,
+        private Mapper             $mapper,
     ){}
 
     /**

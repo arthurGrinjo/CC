@@ -10,7 +10,12 @@ class UserRequest implements Request
     #[Assert\Email]
     public string $email;
 
-    /**
-     * todo: Add all fields which are required for creating a user.
-     */
+    #[Assert\Length(min: 8, max: 32)]
+    public string $password;
+
+    #[Assert\Length(min: 0, max: 60)]
+    public string $firstName;
+
+    #[Assert\Length(min: 0, max: 60)]
+    public string $lastName;
 }

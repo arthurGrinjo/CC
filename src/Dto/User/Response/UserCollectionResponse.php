@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     shortName: 'user',
     operations: [],
-    stateOptions: new Options(entityClass: User::class),
 )]
 final readonly class UserCollectionResponse implements Response
 {
