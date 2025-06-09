@@ -2,45 +2,59 @@
 
 namespace App\Entity;
 
+use App\Dto\User\Response\UserResponse;
+use App\Entity\Enum\UserRole;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Exception;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: UserRepository::class)]
+#[Map(target: UserResponse::class)]
 class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
     use IdentifiableEntity;
 
-    #[Column(length: 180, unique: true)]
-    private ?string $email = null;
+    #[Column(length: 180, unique: true, nullable: false)]
+    private string $email;
 
+    #[Column(length: 64, nullable: false)]
+    private string $password;
+
+    #[Column(length: 60, nullable: true)]
+    private ?string $firstName = '';
+
+    #[Column(length: 60, nullable: true)]
+    private ?string $lastName = '';
+
+    /**
+     * @var array<int,string>
+     */
     #[Column]
     private array $roles = [];
 
-    /**
-     * @var string|null The hashed password
-     */
-    #[Column]
-    private ?string $password = null;
-
-    public function __construct(
-        string $email,
-    )
-    {
+    public function __construct() {
         $this->uuid = Uuid::v6();
-        $this->setEmail($email);
     }
 
-    public function getEmail(): ?string
+    /**
+     * @return non-empty-string
+     * @throws Exception
+     */
+    public function getEmail(): string
     {
-        return $this->email;
+        return ($this->email !== '') ? $this->email : throw new Exception('Email is empty');
     }
 
-    public function setEmail(string $email): static
+    /**
+     * @param non-empty-string $email
+     */
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -48,28 +62,54 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
+     * @return non-empty-string
+     * @throws Exception
      * @see UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->getEmail();
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): User
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): User
+    {
+        $this->lastName = $lastName;
+        return $this;
     }
 
     /**
+     *
+     * @return array|string[]
      * @see UserInterface
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = UserRole::ROLE_USER->value;
 
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
+    /**
+     * @param array<int,string> $roles
+     */
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -84,7 +124,7 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -99,4 +139,12 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+//    /**
+//     * @return Collection<int, Participant>
+//     */
+//    public function getParticipants(): Collection
+//    {
+//        return $this->participants;
+//    }
 }

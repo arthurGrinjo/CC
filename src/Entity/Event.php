@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Dto\Event\Response\EventResponse;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,9 +11,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: EventRepository::class)]
+#[Map(target: EventResponse::class)]
 class Event implements EntityInterface
 {
     use IdentifiableEntity;
@@ -20,6 +23,7 @@ class Event implements EntityInterface
     #[Column(type: Types::TEXT, length: 180)]
     private string $name;
 
+    /** @var Collection<int, Participant> */
     #[OneToMany(mappedBy: 'event', targetEntity: Participant::class, cascade: ['persist'], fetch: 'LAZY')]
     private Collection $participants;
 
@@ -41,7 +45,7 @@ class Event implements EntityInterface
      * @param string $name
      * @return Event
      */
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -53,27 +57,5 @@ class Event implements EntityInterface
     public function getParticipants(): Collection
     {
         return $this->participants;
-    }
-
-    public function addParticipant(Participant $participant): static
-    {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
-            $participant->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipant(Participant $participant): static
-    {
-        if ($this->participants->removeElement($participant)) {
-            // set the owning side to null (unless already changed)
-            if ($participant->getEvent() === $this) {
-                $participant->setEvent(null);
-            }
-        }
-
-        return $this;
     }
 }

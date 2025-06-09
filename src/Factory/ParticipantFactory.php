@@ -21,7 +21,10 @@ final class ParticipantFactory extends PersistentProxyObjectFactory
         return Participant::class;
     }
 
-    protected function defaults(): array|callable
+    /**
+     * @return array<string,mixed>
+     */
+    protected function defaults(): array
     {
         return [
             'user' => repository(User::class)->random(),

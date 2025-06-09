@@ -23,6 +23,7 @@
         "symfony/expression-language": "*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "*",
+        "symfony/object-mapper": "7.3.*",
         "symfony/property-access": "*",
         "symfony/property-info": "*",
         "symfony/runtime": "*",
@@ -74,14 +75,13 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.2.*"
+            "require": "7.3.*"
         }
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.5",
         "phpstan/phpstan-doctrine": "^2.0",
         "rector/rector": "^2.0",
-        "symfony/maker-bundle": "^1.51",
         "symfony/stopwatch": "*",
         "symfony/web-profiler-bundle": "*",
         "zenstruck/foundry": "^2.0"

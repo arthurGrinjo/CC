@@ -13,7 +13,7 @@ trait IdentifiableEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id;
+    private ?int $id = 0;
 
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]

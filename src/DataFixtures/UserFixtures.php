@@ -12,19 +12,23 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    private UserPasswordHasherInterface $passwordHasher;
-
     private const PASSWORD = 'test123!';
     private const PREDEFINED_USERS = array(
-        array('email' => 'arthur@grinjo.nl', 'roles' => ['ROLE_ADMIN'], 'password' => self::PASSWORD),
-        array('email' => 'user@grinjo.nl', 'roles' => ['ROLE_USER'], 'password' => self::PASSWORD),
+        array(
+            'email' => 'arthur@grinjo.nl',
+            'roles' => ['ROLE_ADMIN'],
+            'password' => self::PASSWORD,
+            'first_name' => 'Arthur',
+            'last_name' => 'Beheerder',
+        ),
+        array(
+            'email' => 'user@grinjo.nl',
+            'roles' => ['ROLE_USER'],
+            'password' => self::PASSWORD,
+            'first_name' => 'Arthur',
+            'last_name' => 'Gebruiker',
+        ),
     );
-
-    public function __construct(
-        UserPasswordHasherInterface $passwordHasher,
-    ){
-        $this->passwordHasher = $passwordHasher;
-    }
 
     public function load(ObjectManager $manager): void
     {

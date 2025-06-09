@@ -17,9 +17,6 @@ use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'event',
-    paginationClientEnabled: true,
-    paginationClientItemsPerPage: true,
-    paginationItemsPerPage: 5,
     provider: Provider::class,
     stateOptions: new Options(entityClass: EventEntity::class),
 )]
@@ -35,14 +32,5 @@ use App\Validation\RegexValidations;
         'uuid' => RegexValidations::REGEX_UUID,
     ],
     output: EventResponse::class,
-)]
-#[Post]
-#[Delete(
-    uriVariables: [
-        'uuid' => new Link(fromClass: EventEntity::class, identifiers: ['uuid']),
-    ],
-    requirements: [
-        'uuid' => RegexValidations::REGEX_UUID,
-    ],
 )]
 final readonly class Event {}

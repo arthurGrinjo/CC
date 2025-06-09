@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\Response;
 use App\Entity\Event;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,11 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [],
     stateOptions: new Options(entityClass: Event::class),
 )]
+#[Map(source: Event::class)]
 final readonly class EventResponse implements Response
 {
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
-        #[ApiProperty(identifier: true)]
+        #[ApiProperty(readable: false, identifier: true)]
         public Uuid $uuid,
 
         #[SerializedName('name'), Assert\NotBlank]

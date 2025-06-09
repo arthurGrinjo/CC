@@ -12,6 +12,7 @@ class Mapper
 {
     /**
      * @throws ReflectionException|InvalidMagicMethodCall
+     * todo: perhaps implement PropertyAccessor
      */
     public function toDto(string $output, EntityInterface $entity): Response
     {
