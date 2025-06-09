@@ -11,7 +11,7 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        ParticipantFactory::createMany(40);
+        ParticipantFactory::createMany(100);
     }
 
     public function getDependencies(): array

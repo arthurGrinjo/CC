@@ -36,6 +36,6 @@ class UserFixtures extends Fixture
             UserFactory::createOne($user);
         }
 
-        UserFactory::createMany(20);
+        UserFactory::createMany(50);
     }
 }
