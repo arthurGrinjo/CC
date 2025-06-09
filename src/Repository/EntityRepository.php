@@ -10,7 +10,6 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityNotFoundException;
 use InvalidArgumentException;
 use Symfony\Component\Uid\Uuid;
-
 use function method_exists;
 use function sprintf;
 

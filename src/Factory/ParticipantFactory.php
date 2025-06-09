@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Factory;
 
 use App\Entity\Enum\ParticipantRole;
 use App\Entity\Event;
 use App\Entity\Participant;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
-use function Zenstruck\Foundry\factory;
 use function Zenstruck\Foundry\Persistence\repository;
 
 /**

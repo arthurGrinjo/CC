@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dto\Participant;
 
 use ApiPlatform\Doctrine\Orm\State\Options;
