@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository\Trait;
 
 use App\Entity\EntityInterface;
-use App\Repository\DlpEntity;
 use DateTime;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityNotFoundException;
