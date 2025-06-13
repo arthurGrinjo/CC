@@ -6,9 +6,7 @@ namespace App\Dto\User\Response;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Response;
-use App\Entity\User;
-use Symfony\Component\ObjectMapper\Attribute\Map;
+use App\Dto\ResponseDto;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,8 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'user',
     operations: [],
 )]
-#[Map(source: User::class)]
-class UserResponse implements Response
+class UserResponseDto implements ResponseDto
 {
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]

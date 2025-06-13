@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Dto\User\Request;
 
-use App\Dto\Request;
+use App\Dto\Dto;
+use App\Dto\RequestDto;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UserRequest implements Request
+class UserRequestDto implements RequestDto, DTO
 {
     #[Assert\Email]
     public string $email;

@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Repository\Trait;
 
 use App\Entity\EntityInterface;
+use App\Repository\DlpEntity;
 use DateTime;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityNotFoundException;
@@ -19,7 +20,7 @@ use function sprintf;
 trait EntityRepository
 {
     /**
-     * @return E|null
+     * @return EntityInterface|null
      * @throws InvalidArgumentException
      * @deprecated use getByUuid instead
      */
@@ -29,12 +30,12 @@ trait EntityRepository
             $uuid = Uuid::fromString($uuid);
         }
 
-        /** @var E|null */
+        /** @var EntityInterface|null */
         return $this->findOneBy(['uuid' => $uuid->toRfc4122()]);
     }
 
     /**
-     * @return E
+     * @return EntityInterface
      * @throws EntityNotFoundException
      * @throws InvalidArgumentException
      */
@@ -53,7 +54,7 @@ trait EntityRepository
     }
 
     /**
-     * @return E
+     * @return EntityInterface
      */
     public function create(DlpEntity $entity, bool $flush = true): EntityInterface
     {
@@ -64,12 +65,12 @@ trait EntityRepository
             $entityManager->flush();
         }
 
-        /** @var E */
+        /** @var EntityInterface */
         return $entity;
     }
 
     /**
-     * @return E
+     * @return EntityInterface
      * @throws EntityNotFoundException
      * @throws InvalidArgumentException
      */
@@ -84,7 +85,7 @@ trait EntityRepository
             $entityManager->flush();
         }
 
-        /** @var E */
+        /** @var EntityInterface */
         return $newEntity;
     }
 

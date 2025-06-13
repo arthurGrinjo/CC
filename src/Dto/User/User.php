@@ -8,25 +8,30 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
-use App\Dto\User\Response\UserCollectionResponse;
-use App\Dto\User\Response\UserResponse;
+use ApiPlatform\Metadata\Post;
+use App\Dto\User\Request\UserRequestDto;
+use App\Dto\User\Response\UserCollectionResponseDto;
+use App\Dto\User\Response\UserResponseDto;
 use App\Entity\User as UserEntity;
+use App\Processor\User\CreateUser;
+use App\Processor\User\DeleteUser;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'user',
-    provider: Provider::class,
     stateOptions: new Options(entityClass: UserEntity::class),
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'email' => 'partial',
 ])]
 #[GetCollection(
-    output: UserCollectionResponse::class,
+    output: UserCollectionResponseDto::class,
+    provider: Provider::class,
 )]
 #[Get(
     uriVariables: [
@@ -35,6 +40,21 @@ use App\Validation\RegexValidations;
     requirements: [
         'uuid' => RegexValidations::REGEX_UUID,
     ],
-    output: UserResponse::class,
+    output: UserResponseDto::class,
+    provider: Provider::class,
+)]
+#[Post(
+    input: UserRequestDto::class,
+    output: UserResponseDto::class,
+    processor: CreateUser::class,
+)]
+#[Delete(
+    uriVariables: [
+        'uuid' => new Link(fromClass: UserEntity::class, identifiers: ['uuid']),
+    ],
+    requirements: [
+        'uuid' => RegexValidations::REGEX_UUID,
+    ],
+    processor: DeleteUser::class,
 )]
 final readonly class User {}
