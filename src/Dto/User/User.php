@@ -13,12 +13,15 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Dto\User\Request\UserRequestDto;
+use App\Dto\User\Request\UserRequestPutDto;
 use App\Dto\User\Response\UserCollectionResponseDto;
 use App\Dto\User\Response\UserResponseDto;
 use App\Entity\User as UserEntity;
 use App\Processor\User\CreateUser;
 use App\Processor\User\DeleteUser;
+use App\Processor\User\UpdateUser;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
@@ -47,6 +50,17 @@ use App\Validation\RegexValidations;
     input: UserRequestDto::class,
     output: UserResponseDto::class,
     processor: CreateUser::class,
+)]
+#[Put(
+    uriVariables: [
+        'uuid' => new Link(fromClass: UserEntity::class, identifiers: ['uuid']),
+    ],
+    requirements: [
+        'uuid' => RegexValidations::REGEX_UUID,
+    ],
+    input: UserRequestPutDto::class,
+    output: UserResponseDto::class,
+    processor: UpdateUser::class,
 )]
 #[Delete(
     uriVariables: [

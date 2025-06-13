@@ -20,7 +20,7 @@ class Participant implements EntityInterface
 {
     use IdentifiableEntity;
 
-    #[ManyToOne(targetEntity: User::class, cascade: ['remove'], fetch: 'EAGER')]
+    #[ManyToOne(targetEntity: User::class, cascade: ['remove'], fetch: 'EAGER', inversedBy: 'participants')]
     #[JoinColumn(referencedColumnName: 'id', nullable: false)]
     private User $user;
 
