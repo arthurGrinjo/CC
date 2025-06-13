@@ -2,30 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\Event\Response;
+namespace App\Dto\User\Response;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Response;
-use App\Entity\Event;
-use Symfony\Component\ObjectMapper\Attribute\Map;
+use App\Dto\ResponseDto;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'event',
+    shortName: 'user',
     operations: [],
 )]
-#[Map(source: Event::class)]
-final readonly class EventResponse implements Response
+final readonly class UserCollectionResponseDto implements ResponseDto
 {
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]
         public Uuid $uuid,
 
-        #[SerializedName('name'), Assert\NotBlank]
-        public string $name,
+        #[SerializedName('email'), Assert\NotBlank]
+        public string $email,
     ) {}
 }
