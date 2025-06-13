@@ -6,7 +6,7 @@ namespace App\Dto\Event\Response;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Response;
+use App\Dto\ResponseDto;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'event',
     operations: [],
 )]
-final readonly class EventCollectionResponse implements Response
+final readonly class EventCollectionResponseDto implements ResponseDto
 {
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Dto\Participant\Response\ParticipantResponse;
+use App\Dto\Participant\Response\ParticipantCollectionResponseDto;
+use App\Dto\Participant\Response\ParticipantResponseDto;
 use App\Entity\Enum\ParticipantRole;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\ParticipantRepository;
@@ -12,11 +13,9 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: ParticipantRepository::class)]
-#[Map(target: ParticipantResponse::class)]
 class Participant implements EntityInterface
 {
     use IdentifiableEntity;

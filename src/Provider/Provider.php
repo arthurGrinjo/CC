@@ -41,7 +41,7 @@ final readonly class Provider implements ProviderInterface
 
             foreach ($objects as $object) {
                 $data[] = ($object instanceof $entity)
-                    ? $this->mapper->toDto(output: $output['class'], entity: $object)
+                    ? $this->mapper->entityToDto(entity: $object, target: $output['class'])
                     : throw new EntityNotFoundException($operation->getShortName() . ' does not exist');
             }
 
@@ -58,7 +58,7 @@ final readonly class Provider implements ProviderInterface
         $object = $this->itemProvider->provide($operation, $uriVariables, $context);
 
         return $object instanceof $entity
-            ? $this->mapper->toDto(output: $output['class'], entity: $object)
+            ? $this->mapper->entityToDto(entity: $object, target: $output['class'])
             : throw new EntityNotFoundException($operation->getShortName() . ' does not exist');
     }
 }

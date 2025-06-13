@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
+        "ext-http": "*",
         "ext-iconv": "*",
         "api-platform/core": "^4.0",
         "cweagans/composer-patches": "^1.7",
@@ -24,7 +25,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "*",
         "symfony/object-mapper": "7.3.*",
-        "symfony/property-access": "*",
+        "symfony/property-access": "7.3.*",
         "symfony/property-info": "*",
         "symfony/runtime": "*",
         "symfony/security-bundle": "*",
@@ -32,7 +33,7 @@
         "symfony/twig-bundle": "*",
         "symfony/uid": "*",
         "symfony/validator": "*",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
     },
     "config": {
         "allow-plugins": {

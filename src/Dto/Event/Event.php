@@ -9,19 +9,19 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
-use App\Dto\Event\Response\EventCollectionResponse;
-use App\Dto\Event\Response\EventResponse;
+use App\Dto\Event\Response\EventCollectionResponseDto;
+use App\Dto\Event\Response\EventResponseDto;
 use App\Entity\Event as EventEntity;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'event',
-    provider: Provider::class,
     stateOptions: new Options(entityClass: EventEntity::class),
 )]
 #[GetCollection(
-    output: EventCollectionResponse::class,
+    output: EventCollectionResponseDto::class,
+    provider: Provider::class,
 )]
 #[Get(
     uriTemplate: '/events/{uuid}',
@@ -31,6 +31,7 @@ use App\Validation\RegexValidations;
     requirements: [
         'uuid' => RegexValidations::REGEX_UUID,
     ],
-    output: EventResponse::class,
+    output: EventResponseDto::class,
+    provider: Provider::class,
 )]
 final readonly class Event {}

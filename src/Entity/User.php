@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Dto\User\Response\UserResponse;
 use App\Entity\Enum\UserRole;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\UserRepository;
@@ -17,7 +16,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: UserRepository::class)]
-#[Map(target: UserResponse::class)]
 class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
     use IdentifiableEntity;
@@ -29,10 +27,10 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     private string $password;
 
     #[Column(length: 60, nullable: true)]
-    private ?string $firstName = '';
+    private string $firstName = '';
 
     #[Column(length: 60, nullable: true)]
-    private ?string $lastName = '';
+    private string $lastName = '';
 
     /**
      * @var array<int,string>
@@ -102,10 +100,7 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        $roles[] = UserRole::ROLE_USER->value;
-
-        return array_unique($roles);
+        return array_unique($this->roles);
     }
 
     /**
@@ -113,9 +108,14 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
      */
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = array_values($roles);
 
         return $this;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles(), true);
     }
 
     /**
