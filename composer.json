@@ -24,7 +24,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "*",
         "symfony/object-mapper": "7.3.*",
-        "symfony/property-access": "*",
+        "symfony/property-access": "7.3.*",
         "symfony/property-info": "*",
         "symfony/runtime": "*",
         "symfony/security-bundle": "*",
