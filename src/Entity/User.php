@@ -141,12 +141,4 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-//    /**
-//     * @return Collection<int, Participant>
-//     */
-//    public function getParticipants(): Collection
-//    {
-//        return $this->participants;
-//    }
 }

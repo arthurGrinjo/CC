@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Processor\User;
+namespace App\Processor\Participant;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Dto\Participant\Request\ParticipantRequestDto;
 use App\Dto\ResponseDto;
-use App\Dto\User\Request\UserRequestDto;
 use App\Dto\User\Response\UserResponseDto;
 use App\Entity\User;
 use App\Mapper\Mapper;
@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class CreateUser extends Validator implements ProcessorInterface
+readonly class CreateParticipant extends Validator implements ProcessorInterface
 {
     public function __construct(
         private Mapper $mapper,
@@ -35,7 +35,8 @@ readonly class CreateUser extends Validator implements ProcessorInterface
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ResponseDto
     {
-        if (!$data instanceof UserRequestDto) {
+        dd($data);
+        if (!$data instanceof ParticipantRequestDto) {
             throw new RuntimeException("Invalid input.", Response::HTTP_BAD_REQUEST);
         }
 

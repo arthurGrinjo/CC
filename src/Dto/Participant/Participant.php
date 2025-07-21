@@ -9,11 +9,14 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
+use App\Dto\Participant\Request\ParticipantRequestDto;
 use App\Dto\Participant\Response\EventParticipantCollectionResponseDto;
 use App\Dto\Participant\Response\ParticipantCollectionResponseDto;
 use App\Dto\Participant\Response\ParticipantResponseDto;
 use App\Entity\Event as EventEntity;
 use App\Entity\Participant as ParticipantEntity;
+use App\Processor\Participant\CreateParticipant;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
@@ -35,6 +38,11 @@ use App\Validation\RegexValidations;
     ],
     output: ParticipantResponseDto::class,
     provider: Provider::class,
+)]
+#[Post(
+    uriTemplate: '/participants',
+    input: ParticipantRequestDto::class,
+    processor: CreateParticipant::class,
 )]
 
 /** SubResource */

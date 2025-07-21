@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Dto\Participant\Response\ParticipantResponseDto;
-use App\Dto\User\Request\UserRequestDto;
+use App\Dto\User\Request\RequestDto;
 use App\Mapper\Mapper;
 use App\Repository\ParticipantRepository;
 use App\Repository\UserRepository;
@@ -45,7 +45,7 @@ class TestCommand extends Command
         // test to update entity with RequestDto
         $user = $this->userRepository->findAll()[0];
 
-        $userRequestDto = (new UserRequestDto());
+        $userRequestDto = (new RequestDto());
         $userRequestDto->email = 'test@grinjo.nl';
         $userRequestDto->password = 'test123';
         $userRequestDto->firstName = 'Henk';

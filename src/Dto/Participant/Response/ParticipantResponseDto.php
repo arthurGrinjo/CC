@@ -23,7 +23,7 @@ final readonly class ParticipantResponseDto implements ResponseDto
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]
-        public Uuid             $uuid,
+        public Uuid $uuid,
 
         #[SerializedName('role'), Assert\NotBlank]
         public ParticipantRole  $role,
