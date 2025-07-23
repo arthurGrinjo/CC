@@ -7,7 +7,7 @@ namespace App\Dto\User\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\ResponseDto;
+use App\Controller\Dto\ResponseDto;
 use App\Entity\User;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;

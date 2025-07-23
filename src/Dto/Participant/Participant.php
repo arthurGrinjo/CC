@@ -10,12 +10,13 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
-use App\Dto\Participant\Request\ParticipantRequestDto;
-use App\Dto\Participant\Response\EventParticipantCollectionResponseDto;
-use App\Dto\Participant\Response\ParticipantCollectionResponseDto;
-use App\Dto\Participant\Response\ParticipantResponseDto;
+use App\Controller\Dto\Participant\Request\ParticipantRequestDto;
+use App\Controller\Dto\Participant\Response\EventParticipantCollectionResponseDto;
+use App\Controller\Dto\Participant\Response\ParticipantCollectionResponseDto;
+use App\Controller\Dto\Participant\Response\ParticipantResponseDto;
 use App\Entity\Event as EventEntity;
 use App\Entity\Participant as ParticipantEntity;
+use App\Processor\Create;
 use App\Processor\Participant\CreateParticipant;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
@@ -43,7 +44,7 @@ use App\Validation\RegexValidations;
     uriTemplate: '/participants',
     input: ParticipantRequestDto::class,
     output: ParticipantResponseDto::class,
-    processor: CreateParticipant::class,
+    processor: Create::class,
 )]
 
 /** SubResource */

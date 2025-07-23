@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto\User\Request;
 
-use App\Dto\RequestDto;
+use App\Controller\Dto\RequestDto;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class UserRequestPutDto implements RequestDto

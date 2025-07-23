@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Participant\Response\ParticipantCollectionResponseDto;
-use App\Dto\Participant\Response\ParticipantResponseDto;
+use App\Controller\Dto\Participant\Response\ParticipantCollectionResponseDto;
+use App\Controller\Dto\Participant\Response\ParticipantResponseDto;
 use App\Entity\Enum\ParticipantRole;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\ParticipantRepository;

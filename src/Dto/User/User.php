@@ -14,20 +14,18 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Dto\User\Request\UserRequestDto;
-use App\Dto\User\Request\UserRequestPutDto;
-use App\Dto\User\Response\UserCollectionResponseDto;
-use App\Dto\User\Response\UserResponseDto;
+use App\Controller\Dto\User\Request\UserRequestDto;
+use App\Controller\Dto\User\Request\UserRequestPutDto;
+use App\Controller\Dto\User\Response\UserCollectionResponseDto;
+use App\Controller\Dto\User\Response\UserResponseDto;
 use App\Entity\User as UserEntity;
-use App\Processor\User\CreateUser;
-use App\Processor\User\DeleteUser;
+use App\Processor;
 use App\Processor\User\UpdateUser;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'user',
-    provider: Provider::class,
     stateOptions: new Options(entityClass: UserEntity::class),
 )]
 #[ApiFilter(SearchFilter::class, properties: [
@@ -35,6 +33,7 @@ use App\Validation\RegexValidations;
 ])]
 #[GetCollection(
     output: UserCollectionResponseDto::class,
+    provider: Provider::class,
 )]
 #[Get(
     uriTemplate: '/users/{uuid}',
@@ -45,11 +44,12 @@ use App\Validation\RegexValidations;
         'uuid' => RegexValidations::REGEX_UUID,
     ],
     output: UserResponseDto::class,
+    provider: Provider::class,
 )]
 #[Post(
     input: UserRequestDto::class,
     output: UserResponseDto::class,
-    processor: CreateUser::class,
+    processor: Processor\Create::class,
 )]
 #[Put(
     uriVariables: [
@@ -60,7 +60,7 @@ use App\Validation\RegexValidations;
     ],
     input: UserRequestPutDto::class,
     output: UserResponseDto::class,
-    processor: UpdateUser::class,
+    processor: Processor\Update::class,
 )]
 #[Delete(
     uriVariables: [
@@ -69,6 +69,6 @@ use App\Validation\RegexValidations;
     requirements: [
         'uuid' => RegexValidations::REGEX_UUID,
     ],
-    processor: DeleteUser::class,
+    processor: Processor\Delete::class,
 )]
 final readonly class User {}

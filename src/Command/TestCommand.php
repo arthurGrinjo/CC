@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Dto\Participant\Response\ParticipantResponseDto;
+use App\Controller\Dto\Participant\Response\ParticipantResponseDto;
 use App\Dto\User\Request\RequestDto;
 use App\Mapper\Mapper;
 use App\Repository\ParticipantRepository;
