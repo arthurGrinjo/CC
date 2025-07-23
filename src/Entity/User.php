@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\Enum\UserRole;
+use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Exception;
-use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
+#[ApiResource(operations: [])]
 #[Entity(repositoryClass: UserRepository::class)]
 class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -141,12 +141,4 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-//    /**
-//     * @return Collection<int, Participant>
-//     */
-//    public function getParticipants(): Collection
-//    {
-//        return $this->participants;
-//    }
 }

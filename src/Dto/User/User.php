@@ -19,9 +19,7 @@ use App\Dto\User\Request\UserRequestPutDto;
 use App\Dto\User\Response\UserCollectionResponseDto;
 use App\Dto\User\Response\UserResponseDto;
 use App\Entity\User as UserEntity;
-use App\Processor\User\CreateUser;
-use App\Processor\User\DeleteUser;
-use App\Processor\User\UpdateUser;
+use App\Processor;;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
@@ -37,6 +35,7 @@ use App\Validation\RegexValidations;
     provider: Provider::class,
 )]
 #[Get(
+    uriTemplate: '/users/{uuid}',
     uriVariables: [
         'uuid' => new Link(fromClass: UserEntity::class, identifiers: ['uuid']),
     ],
@@ -49,7 +48,7 @@ use App\Validation\RegexValidations;
 #[Post(
     input: UserRequestDto::class,
     output: UserResponseDto::class,
-    processor: CreateUser::class,
+    processor: Processor\Create::class,
 )]
 #[Put(
     uriVariables: [
@@ -60,7 +59,7 @@ use App\Validation\RegexValidations;
     ],
     input: UserRequestPutDto::class,
     output: UserResponseDto::class,
-    processor: UpdateUser::class,
+    processor: Processor\Update::class,
 )]
 #[Delete(
     uriVariables: [
@@ -69,6 +68,6 @@ use App\Validation\RegexValidations;
     requirements: [
         'uuid' => RegexValidations::REGEX_UUID,
     ],
-    processor: DeleteUser::class,
+    processor: Processor\Delete::class,
 )]
 final readonly class User {}

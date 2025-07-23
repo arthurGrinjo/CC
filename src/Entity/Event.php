@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,6 +15,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
+#[ApiResource(operations: [])]
 #[Entity(repositoryClass: EventRepository::class)]
 class Event implements EntityInterface
 {
@@ -23,7 +25,7 @@ class Event implements EntityInterface
     private string $name;
 
     /** @var Collection<int, Participant> */
-    #[OneToMany(mappedBy: 'event', targetEntity: Participant::class, cascade: ['persist'], fetch: 'LAZY')]
+    #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
     private Collection $participants;
 
     public function __construct()

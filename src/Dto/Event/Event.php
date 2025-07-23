@@ -17,11 +17,11 @@ use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'event',
+    provider: Provider::class,
     stateOptions: new Options(entityClass: EventEntity::class),
 )]
 #[GetCollection(
     output: EventCollectionResponseDto::class,
-    provider: Provider::class,
 )]
 #[Get(
     uriTemplate: '/events/{uuid}',
@@ -32,6 +32,5 @@ use App\Validation\RegexValidations;
         'uuid' => RegexValidations::REGEX_UUID,
     ],
     output: EventResponseDto::class,
-    provider: Provider::class,
 )]
 final readonly class Event {}
