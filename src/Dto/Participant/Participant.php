@@ -42,6 +42,7 @@ use App\Validation\RegexValidations;
 #[Post(
     uriTemplate: '/participants',
     input: ParticipantRequestDto::class,
+    output: ParticipantResponseDto::class,
     processor: CreateParticipant::class,
 )]
 

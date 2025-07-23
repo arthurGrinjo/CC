@@ -27,6 +27,7 @@ use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'user',
+    provider: Provider::class,
     stateOptions: new Options(entityClass: UserEntity::class),
 )]
 #[ApiFilter(SearchFilter::class, properties: [
@@ -34,9 +35,9 @@ use App\Validation\RegexValidations;
 ])]
 #[GetCollection(
     output: UserCollectionResponseDto::class,
-    provider: Provider::class,
 )]
 #[Get(
+    uriTemplate: '/users/{uuid}',
     uriVariables: [
         'uuid' => new Link(fromClass: UserEntity::class, identifiers: ['uuid']),
     ],
@@ -44,7 +45,6 @@ use App\Validation\RegexValidations;
         'uuid' => RegexValidations::REGEX_UUID,
     ],
     output: UserResponseDto::class,
-    provider: Provider::class,
 )]
 #[Post(
     input: UserRequestDto::class,

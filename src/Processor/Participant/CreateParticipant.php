@@ -7,9 +7,9 @@ namespace App\Processor\Participant;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Dto\Participant\Request\ParticipantRequestDto;
+use App\Dto\Participant\Response\ParticipantResponseDto;
 use App\Dto\ResponseDto;
-use App\Dto\User\Response\UserResponseDto;
-use App\Entity\User;
+use App\Entity\Participant;
 use App\Mapper\Mapper;
 use App\Processor\Validator;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
@@ -31,23 +31,21 @@ readonly class CreateParticipant extends Validator implements ProcessorInterface
     }
 
     /**
-     * @throws RuntimeException
+     * @throws RuntimeException|ReflectionException
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ResponseDto
     {
-        dd($data);
         if (!$data instanceof ParticipantRequestDto) {
             throw new RuntimeException("Invalid input.", Response::HTTP_BAD_REQUEST);
         }
 
         $this->validateDto($data);
-
-        $user = $this->mapper->merge(dto: $data, entity: new User());
+        $participant = $this->mapper->merge(dto: $data, entity: new Participant());
 
         try {
             return $this->mapper->entityToDto(
-                entity: $this->persistProcessor->process($user, $operation, $uriVariables, $context),
-                target: UserResponseDto::class,
+                entity: $this->persistProcessor->process($participant, $operation, $uriVariables, $context),
+                target: ParticipantResponseDto::class,
             );
         } catch (InvalidMagicMethodCall|ReflectionException) {
             throw new RuntimeException("Unable to generate response.", Response::HTTP_INTERNAL_SERVER_ERROR);
