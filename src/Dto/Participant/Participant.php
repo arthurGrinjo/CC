@@ -16,7 +16,7 @@ use App\Dto\Participant\Response\ParticipantCollectionResponseDto;
 use App\Dto\Participant\Response\ParticipantResponseDto;
 use App\Entity\Event as EventEntity;
 use App\Entity\Participant as ParticipantEntity;
-use App\Processor;
+use App\Processor\StandardProcessor;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
@@ -43,7 +43,7 @@ use App\Validation\RegexValidations;
     uriTemplate: '/participants',
     input: ParticipantRequestDto::class,
     output: ParticipantResponseDto::class,
-    processor: Processor\Create::class,
+    processor: StandardProcessor::class,
 )]
 
 /** SubResource */
