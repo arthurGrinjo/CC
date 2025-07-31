@@ -32,10 +32,11 @@ final readonly class ParticipantCollectionResponseDto implements ResponseDto
         public ParticipantRole  $role,
 
         #[SerializedName('user'), Assert\NotBlank]
-        #[ApiProperty(readableLink: true)]
+        #[ApiProperty(readableLink: false)]
         public UserResponseDto  $user,
 
         #[SerializedName('event'), Assert\NotBlank]
+        #[ApiProperty(readableLink: true)]
         public EventResponseDto $event,
     ) {}
 }

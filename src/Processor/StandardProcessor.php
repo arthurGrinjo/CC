@@ -6,12 +6,11 @@ namespace App\Processor;
 
 use ApiPlatform\Doctrine\Common\State\RemoveProcessor;
 use ApiPlatform\Doctrine\Orm\State\Options;
-use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
-use ApiPlatform\State\Util\StateOptionsTrait;
 use App\Dto\ResponseDto;
 use App\Mapper\Mapper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,11 +20,10 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
 
 readonly class StandardProcessor extends Validator implements ProcessorInterface
 {
-    use StateOptionsTrait;
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Mapper $mapper,
@@ -38,11 +36,14 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
     }
 
     /**
-     * @throws RuntimeException|ReflectionException
+     * @throws RuntimeException
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ResponseDto|int
     {
-        $entityClass = $this->getStateOptionsClass($operation, $operation->getClass(), Options::class);
+        $stateOptions = $operation->getStateOptions();
+        $entityClass = ($stateOptions instanceof Options)
+            ? $stateOptions->getEntityClass()
+            : throw new RuntimeException("Entity class not found.", Response::HTTP_INTERNAL_SERVER_ERROR);
 
         switch(true) {
             case $operation instanceof Post:
@@ -55,7 +56,7 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
                 $this->removeProcessor->process($data, $operation, $uriVariables, $context);
                 return Response::HTTP_NO_CONTENT;
             default:
-                throw new RuntimeException('Could not process request.');
+                throw new RuntimeException('Cannot process this request.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -76,8 +77,8 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
                 entity: $this->persistProcessor->process($entity, $operation, $uriVariables, $context),
                 target: $operation->getOutput()['class'],
             );
-        } catch (InvalidMagicMethodCall|ReflectionException) {
-            throw new RuntimeException("Unable to generate response.", Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (InvalidMagicMethodCall|ReflectionException|Throwable $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -98,8 +99,8 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
                 entity: $this->persistProcessor->process($updatedEntity, $operation, $uriVariables, $context),
                 target: $operation->getOutput()['class'],
             );
-        } catch (InvalidMagicMethodCall|ReflectionException) {
-            throw new RuntimeException("Unable to generate response.", Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (InvalidMagicMethodCall|ReflectionException|Throwable $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode());
         }
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Dto\Participant;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -24,6 +26,9 @@ use App\Validation\RegexValidations;
     shortName: 'participant',
     stateOptions: new Options(entityClass: ParticipantEntity::class),
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'event.name' => 'partial',
+])]
 #[GetCollection(
     output: ParticipantCollectionResponseDto::class,
     provider: Provider::class,
