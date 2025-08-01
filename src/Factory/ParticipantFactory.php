@@ -26,10 +26,23 @@ final class ParticipantFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array
     {
+        $participant = $this->getParticipant();
+
+        while (repository(Participant::class)->findOneBy($participant) instanceof Participant) {
+            $participant = $this->getParticipant();
+        }
+
+        return array_merge(
+            $participant,
+            ['role' => self::faker()->randomElement(ParticipantRole::cases())]
+        );
+    }
+
+    private function getParticipant(): array
+    {
         return [
             'user' => repository(User::class)->random(),
             'event' => repository(Event::class)->random(),
-            'role' => self::faker()->randomElement(ParticipantRole::cases()),
         ];
     }
 }

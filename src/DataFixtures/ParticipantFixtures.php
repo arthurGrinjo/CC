@@ -11,9 +11,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class ParticipantFixtures extends Fixture implements DependentFixtureInterface
 {
+    const int NUMBER_OF_OBJECTS = 100;
+
     public function load(ObjectManager $manager): void
     {
-        ParticipantFactory::createMany(100);
+        for ($i = 0; $i < self::NUMBER_OF_OBJECTS; $i++) {
+            ParticipantFactory::createOne();
+        }
     }
 
     public function getDependencies(): array

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## Description: Runs phpstan with the current project
+## Usage: phpstan
+## Example: "ddev phpstan"
+
+vendor/bin/phpstan "$@"

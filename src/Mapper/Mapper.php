@@ -12,6 +12,7 @@ use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
+use ReflectionType;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -30,13 +31,19 @@ readonly class Mapper
         $construct = [];
         $responseDto = new ReflectionClass($target);
 
-        if ($responseDto->implementsInterface(ResponseDto::class) === false) {
+        if (
+            $responseDto->implementsInterface(ResponseDto::class) === false
+            || $responseDto->getConstructor() === null
+        ) {
             throw new ReflectionException('Dto not found: ' . $target);
         }
 
         foreach ($responseDto->getConstructor()->getParameters() as $property) {
             if (
-                $property->getType()->isBuiltin() === false
+                $property->getType() instanceof ReflectionType
+                && method_exists($property->getType(), 'isBuiltin')
+                && method_exists($property->getType(), 'getName')
+                && $property->getType()->isBuiltin() === false
                 && (new ReflectionClass($property->getType()->getName()))->implementsInterface(ResponseDto::class)
             ) {
                 $construct[] = $this->entityToDto(
@@ -57,16 +64,27 @@ readonly class Mapper
      */
     public function merge(RequestDto $dto, EntityInterface $entity): EntityInterface
     {
-        foreach ($dto as $key => $value) {
+        /** todo: try to handle with ObjectId's, e.g. EventId, ParticipantId, UserId etc. */
+        $data = (new ReflectionClass($dto))->getProperties();
+        foreach ($data as $property) {
+            $value = $this->propertyAccessor->getValue($dto, $property->name);
+
             if ($value instanceof Uuid || is_int($value)) {
-                $property = new ReflectionProperty($entity, $key);
-                $repository = $this->entityManager->getRepository($property->getType()->getName());
+                $propertyClass = new ReflectionProperty($entity, $property->name);
+                if (
+                    !$propertyClass->getType() instanceof ReflectionType
+                    || !method_exists($propertyClass->getType(), 'getName')
+                ) {
+                    throw new ReflectionException('Incorrect Dto: '. $property->name);
+                }
+
+                $repository = $this->entityManager->getRepository($propertyClass->getType()->getName());
                 $value = $repository->findOneBy($value instanceof Uuid
                     ? ['uuid' => $value]
                     : ['id' => $value]
                 );
             }
-            $this->propertyAccessor->setValue($entity, $key, $value);
+            $this->propertyAccessor->setValue($entity, $property->name, $value);
         }
 
         return $entity;

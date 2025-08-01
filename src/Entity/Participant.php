@@ -11,9 +11,11 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: ParticipantRepository::class)]
+#[UniqueConstraint(name: "participant", columns: ["event_id", "user_id"])]
 class Participant implements EntityInterface
 {
     use IdentifiableEntity;

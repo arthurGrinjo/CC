@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## Description: Runs phpcs with the current project
+## Usage: phpcs
+## Example: "ddev phpcs"
+
+vendor/bin/phpcs --parallel=$(nproc) "$@"

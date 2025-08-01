@@ -10,6 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class UserFixtures extends Fixture
 {
+    const int NUMBER_OF_OBJECTS = 50;
     private const PASSWORD = 'test123!';
     private const PREDEFINED_USERS = array(
         array(
@@ -34,6 +35,6 @@ class UserFixtures extends Fixture
             UserFactory::createOne($user);
         }
 
-        UserFactory::createMany(50);
+        UserFactory::createMany(self::NUMBER_OF_OBJECTS);
     }
 }
