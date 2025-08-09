@@ -11,12 +11,11 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Exception;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(operations: [])]
 #[Entity(repositoryClass: UserRepository::class)]
-class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
+class User implements EntityInterface, PasswordAuthenticatedUserInterface
 {
     use IdentifiableEntity;
 

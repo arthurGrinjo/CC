@@ -7,6 +7,7 @@ namespace App\Mapper;
 use App\Dto\ResponseDto;
 use App\Dto\RequestDto;
 use App\Entity\EntityInterface;
+use App\Entity\Identifiers\IdentifierInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use ReflectionClass;
@@ -69,20 +70,10 @@ readonly class Mapper
         foreach ($data as $property) {
             $value = $this->propertyAccessor->getValue($dto, $property->name);
 
-            if ($value instanceof Uuid || is_int($value)) {
-                $propertyClass = new ReflectionProperty($entity, $property->name);
-                if (
-                    !$propertyClass->getType() instanceof ReflectionType
-                    || !method_exists($propertyClass->getType(), 'getName')
-                ) {
-                    throw new ReflectionException('Incorrect Dto: '. $property->name);
-                }
-
-                $repository = $this->entityManager->getRepository($propertyClass->getType()->getName());
-                $value = $repository->findOneBy($value instanceof Uuid
-                    ? ['uuid' => $value]
-                    : ['id' => $value]
-                );
+            /** instanceof IdentityInterface, then */
+            if ($value instanceof IdentifierInterface && $value instanceof Uuid) {
+                $repository = $this->entityManager->getRepository($value->getClass());
+                $value = $repository->findOneBy(['uuid' => $value]);
             }
             $this->propertyAccessor->setValue($entity, $property->name, $value);
         }

@@ -20,12 +20,12 @@ class Participant implements EntityInterface
 {
     use IdentifiableEntity;
 
-    #[ManyToOne(targetEntity: User::class, cascade: ['remove'], fetch: 'EAGER')]
-    #[JoinColumn(referencedColumnName: 'id', nullable: false)]
+    #[ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
-    #[ManyToOne(targetEntity: Event::class, cascade: ['remove'], fetch: 'EAGER', inversedBy: 'participants')]
-    #[JoinColumn(referencedColumnName: 'id', nullable: false)]
+    #[ManyToOne(targetEntity: Event::class, fetch: 'EAGER', inversedBy: 'participants')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Event $event;
 
     #[Column(length: 255)]

@@ -8,6 +8,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
@@ -48,6 +49,15 @@ use App\Validation\RegexValidations;
     uriTemplate: '/participants',
     input: ParticipantRequestDto::class,
     output: ParticipantResponseDto::class,
+    processor: StandardProcessor::class,
+)]
+#[Delete(
+    uriVariables: [
+        'uuid' => new Link(fromClass: ParticipantEntity::class, identifiers: ['uuid']),
+    ],
+    requirements: [
+        'uuid' => RegexValidations::REGEX_UUID,
+    ],
     processor: StandardProcessor::class,
 )]
 
