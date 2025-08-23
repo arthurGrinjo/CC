@@ -6,32 +6,30 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\IdentifiableEntity;
-use App\Repository\EventRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\GearRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(operations: [])]
-#[Entity(repositoryClass: EventRepository::class)]
-class Event implements EntityInterface
+#[Entity(repositoryClass: GearRepository::class)]
+class Gear implements EntityInterface
 {
     use IdentifiableEntity;
 
     #[Column(type: Types::TEXT, length: 180)]
     private string $name;
 
-    /** @var Collection<int, Participant> */
-    #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
-    private Collection $participants;
+    #[ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private User $owner;
 
     public function __construct()
     {
         $this->uuid = Uuid::v6();
-        $this->participants = new ArrayCollection();
     }
 
     public function getName(): string
@@ -45,11 +43,14 @@ class Event implements EntityInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Participant>
-     */
-    public function getParticipants(): Collection
+    public function getOwner(): User
     {
-        return $this->participants;
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner): self
+    {
+        $this->owner = $owner;
+        return $this;
     }
 }

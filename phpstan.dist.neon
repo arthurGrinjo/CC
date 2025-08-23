@@ -1,7 +1,10 @@
 parameters:
-    level: 6
     paths:
-        - bin/
-        - config/
-        - public/
-        - src/
+        - bin
+        - config
+        - src
+    excludePaths:
+        - src/Migrations/*.php
+    level: max
+includes:
+	- phar://phpstan.phar/conf/bleedingEdge.neon

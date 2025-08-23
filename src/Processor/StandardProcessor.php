@@ -36,14 +36,17 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
     }
 
     /**
-     * @throws RuntimeException
+     * @param mixed $data
+     * @param Operation $operation
+     * @param array $uriVariables
+     * @param array $context
+     * @return ResponseDto|int
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ResponseDto|int
     {
-        $stateOptions = $operation->getStateOptions();
-        $entityClass = ($stateOptions instanceof Options)
-            ? $stateOptions->getEntityClass()
-            : throw new RuntimeException("Entity class not found.", Response::HTTP_INTERNAL_SERVER_ERROR);
+        $entityClass = ($operation->getStateOptions() instanceof Options)
+            ? $operation->getStateOptions()->getEntityClass()
+            : throw new RuntimeException('Provider: No entity class defined.');
 
         switch(true) {
             case $operation instanceof Post:

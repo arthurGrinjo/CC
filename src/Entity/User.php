@@ -70,23 +70,23 @@ class User implements EntityInterface, PasswordAuthenticatedUserInterface
         return $this->getEmail();
     }
 
-    public function getFirstName(): ?string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    public function setFirstName(?string $firstName): User
+    public function setFirstName(string $firstName): User
     {
         $this->firstName = $firstName;
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    public function setLastName(?string $lastName): User
+    public function setLastName(string $lastName): User
     {
         $this->lastName = $lastName;
         return $this;

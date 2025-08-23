@@ -26,10 +26,11 @@ final class ParticipantFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array
     {
-        $participant = $this->getParticipant();
+        $participant = $this->createParticipant();
 
         while (repository(Participant::class)->findOneBy($participant) instanceof Participant) {
-            $participant = $this->getParticipant();
+            /** re-generate while current combination already exists */
+            $participant = $this->createParticipant();
         }
 
         return array_merge(
@@ -38,7 +39,7 @@ final class ParticipantFactory extends PersistentProxyObjectFactory
         );
     }
 
-    private function getParticipant(): array
+    private function createParticipant(): array
     {
         return [
             'user' => repository(User::class)->random(),

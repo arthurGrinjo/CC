@@ -11,8 +11,8 @@ use Doctrine\Persistence\ObjectManager;
 class UserFixtures extends Fixture
 {
     const int NUMBER_OF_OBJECTS = 50;
-    private const PASSWORD = 'test123!';
-    private const PREDEFINED_USERS = array(
+    private const string PASSWORD = 'test123!';
+    private const array PREDEFINED_USERS = array(
         array(
             'email' => 'arthur@grinjo.nl',
             'roles' => ['ROLE_ADMIN'],
