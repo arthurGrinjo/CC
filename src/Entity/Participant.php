@@ -11,19 +11,21 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: ParticipantRepository::class)]
+#[UniqueConstraint(name: "participant", columns: ["event_id", "user_id"])]
 class Participant implements EntityInterface
 {
     use IdentifiableEntity;
 
-    #[ManyToOne(targetEntity: User::class, cascade: ['remove'], fetch: 'EAGER')]
-    #[JoinColumn(referencedColumnName: 'id', nullable: false)]
+    #[ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
-    #[ManyToOne(targetEntity: Event::class, cascade: ['remove'], fetch: 'EAGER', inversedBy: 'participants')]
-    #[JoinColumn(referencedColumnName: 'id', nullable: false)]
+    #[ManyToOne(targetEntity: Event::class, fetch: 'EAGER', inversedBy: 'participants')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Event $event;
 
     #[Column(length: 255)]

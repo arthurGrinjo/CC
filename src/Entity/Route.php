@@ -6,32 +6,24 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\IdentifiableEntity;
-use App\Repository\EventRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\RouteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(operations: [])]
-#[Entity(repositoryClass: EventRepository::class)]
-class Event implements EntityInterface
+#[Entity(repositoryClass: RouteRepository::class)]
+class Route implements EntityInterface
 {
     use IdentifiableEntity;
 
     #[Column(type: Types::TEXT, length: 180)]
     private string $name;
 
-    /** @var Collection<int, Participant> */
-    #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
-    private Collection $participants;
-
     public function __construct()
     {
         $this->uuid = Uuid::v6();
-        $this->participants = new ArrayCollection();
     }
 
     public function getName(): string
@@ -43,13 +35,5 @@ class Event implements EntityInterface
     {
         $this->name = $name;
         return $this;
-    }
-
-    /**
-     * @return Collection<int, Participant>
-     */
-    public function getParticipants(): Collection
-    {
-        return $this->participants;
     }
 }

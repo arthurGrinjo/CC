@@ -11,9 +11,11 @@ use Doctrine\Persistence\ObjectManager;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
+    const int NUMBER_OF_OBJECTS = 15;
+
     public function load(ObjectManager $manager): void
     {
-        EventFactory::createMany(10);
+        EventFactory::createMany(15);
     }
 
     public function getDependencies(): array

@@ -4,27 +4,24 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Factory\ParticipantFactory;
+use App\Factory\GearFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ParticipantFixtures extends Fixture implements DependentFixtureInterface
+class GearFixtures extends Fixture implements DependentFixtureInterface
 {
-    const int NUMBER_OF_OBJECTS = 100;
+    const int NUMBER_OF_OBJECTS = 15;
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < self::NUMBER_OF_OBJECTS; $i++) {
-            ParticipantFactory::createOne();
-        }
+        GearFactory::createMany(self::NUMBER_OF_OBJECTS);
     }
 
     public function getDependencies(): array
     {
         return [
             UserFixtures::class,
-            EventFixtures::class,
         ];
     }
 }

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## Description: Runs phpcbf with the current project
+## Usage: phpcbf
+## Example: "ddev phpcbf"
+
+vendor/bin/phpcbf --parallel=$(nproc) "$@"

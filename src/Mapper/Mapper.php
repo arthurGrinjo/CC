@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Mapper;
 
-use App\Dto\ResponseDto;
 use App\Dto\RequestDto;
+use App\Dto\ResponseDto;
 use App\Entity\EntityInterface;
+use App\Entity\Identifiers\IdentifierInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
+use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionProperty;
+use ReflectionType;
+use Symfony\Component\PropertyAccess\Exception\AccessException;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -23,50 +26,79 @@ readonly class Mapper
     ) {}
 
     /**
-     * @throws ReflectionException|InvalidMagicMethodCall
+     * @param EntityInterface $entity
+     * @param class-string $target
+     * @return ResponseDto
+     * @throws ReflectionException
      */
     public function entityToDto(EntityInterface $entity, string $target): ResponseDto
     {
         $construct = [];
-        $responseDto = new ReflectionClass($target);
+        $responseDto = class_exists($target)
+            ? new ReflectionClass($target)
+            : throw new ReflectionException('Class not found: ' . $target)
+        ;
 
-        if ($responseDto->implementsInterface(ResponseDto::class) === false) {
+        if (
+            $responseDto->implementsInterface(ResponseDto::class) === false
+            || $responseDto->getConstructor() === null
+        ) {
             throw new ReflectionException('Dto not found: ' . $target);
         }
 
         foreach ($responseDto->getConstructor()->getParameters() as $property) {
             if (
-                $property->getType()->isBuiltin() === false
+                $property->getType() instanceof ReflectionType
+                && method_exists($property->getType(), 'isBuiltin')
+                && method_exists($property->getType(), 'getName')
+                && $property->getType()->isBuiltin() === false
+                && is_string($property->getType()->getName())
+                && class_exists($property->getType()->getName())
                 && (new ReflectionClass($property->getType()->getName()))->implementsInterface(ResponseDto::class)
             ) {
-                $construct[] = $this->entityToDto(
-                    entity: $this->propertyAccessor->getValue($entity, $property->name),
-                    target: $property->getType()->getName()
-                );
+                $propertyValue = $this->propertyAccessor->getValue($entity, $property->name);
+                $construct[] = ($propertyValue instanceof EntityInterface)
+                    ? $this->entityToDto(
+                        entity: $propertyValue,
+                        target: $property->getType()->getName()
+                    )
+                    : throw new ReflectionException(
+                        'Entity to DTO error, invalid input: '. $property->getType()->getName()
+                    )
+                ;
+
                 continue;
             }
 
             $construct[] = $this->propertyAccessor->getValue($entity, $property->name);
         }
 
-        return $responseDto->newInstance(...$construct);
+        $response = $responseDto->newInstance(...$construct);
+
+        return ($response instanceof ResponseDto)
+            ? $response
+            : throw new ReflectionException('Invalid response: ' . $target)
+        ;
     }
 
     /**
-     * @throws ReflectionException
+     * @throws AccessException
+     * @throws InvalidArgumentException
+     * @throws UnexpectedTypeException
      */
     public function merge(RequestDto $dto, EntityInterface $entity): EntityInterface
     {
-        foreach ($dto as $key => $value) {
-            if ($value instanceof Uuid || is_int($value)) {
-                $property = new ReflectionProperty($entity, $key);
-                $repository = $this->entityManager->getRepository($property->getType()->getName());
-                $value = $repository->findOneBy($value instanceof Uuid
-                    ? ['uuid' => $value]
-                    : ['id' => $value]
-                );
+        $data = (new ReflectionClass($dto))->getProperties();
+        foreach ($data as $property) {
+            $value = $this->propertyAccessor->getValue($dto, $property->name);
+
+            if ($value instanceof IdentifierInterface && $value instanceof Uuid) {
+                /** @phpstan-var class-string $entityClass */
+                $entityClass = $value->getClass();
+                $repository = $this->entityManager->getRepository($entityClass);
+                $value = $repository->findOneBy(['uuid' => $value]);
             }
-            $this->propertyAccessor->setValue($entity, $key, $value);
+            $this->propertyAccessor->setValue($entity, $property->name, $value);
         }
 
         return $entity;

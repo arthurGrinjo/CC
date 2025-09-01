@@ -36,6 +36,7 @@ final readonly class ParticipantCollectionResponseDto implements ResponseDto
         public UserResponseDto  $user,
 
         #[SerializedName('event'), Assert\NotBlank]
+        #[ApiProperty(readableLink: true)]
         public EventResponseDto $event,
     ) {}
 }
