@@ -8,6 +8,7 @@ use App\Entity\Enum\ParticipantRole;
 use App\Entity\Event;
 use App\Entity\Participant;
 use App\Entity\User;
+use Zenstruck\Foundry\Persistence\Exception\NotEnoughObjects;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use function Zenstruck\Foundry\Persistence\repository;
 
@@ -39,6 +40,10 @@ final class ParticipantFactory extends PersistentProxyObjectFactory
         );
     }
 
+    /**
+     * @return array{user: User, event: Event}
+     * @throws NotEnoughObjects
+     */
     private function createParticipant(): array
     {
         return [

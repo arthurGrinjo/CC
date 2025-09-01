@@ -5,6 +5,8 @@ parameters:
         - src
     excludePaths:
         - src/Migrations/*.php
+    ignoreErrors:
+    		- '#Call to method .* of internal class#'
     level: max
 includes:
 	- phar://phpstan.phar/conf/bleedingEdge.neon

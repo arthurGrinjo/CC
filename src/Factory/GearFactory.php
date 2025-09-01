@@ -20,7 +20,7 @@ final class GearFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string, User|string>
      */
     protected function defaults(): array
     {
