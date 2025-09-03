@@ -47,8 +47,8 @@ final class ParticipantFactory extends PersistentProxyObjectFactory
     private function createParticipant(): array
     {
         return [
-            'user' => repository(User::class)->random(),
             'event' => repository(Event::class)->random(),
+            'user' => repository(User::class)->random(),
         ];
     }
 }
