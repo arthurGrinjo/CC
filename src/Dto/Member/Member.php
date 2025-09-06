@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
+use App\Dto\Member\Request\MemberRequestDto;
 use App\Dto\Member\Response\ClubMemberCollectionResponseDto;
 use App\Dto\Member\Response\MemberCollectionResponseDto;
 use App\Dto\Member\Response\MemberResponseDto;
@@ -42,6 +44,11 @@ use App\Validation\RegexValidations;
     ],
     output: MemberResponseDto::class,
     provider: Provider::class,
+)]
+#[Post(
+    input: MemberRequestDto::class,
+    output: MemberResponseDto::class,
+    processor: StandardProcessor::class,
 )]
 #[Delete(
     uriVariables: [
