@@ -23,8 +23,8 @@ class MemberFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            UserFixtures::class,
             ClubFixtures::class,
+            UserFixtures::class,
         ];
     }
 }

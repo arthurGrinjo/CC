@@ -19,11 +19,11 @@ use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'activity',
-    provider: Provider::class,
     stateOptions: new Options(entityClass: ActivityEntity::class),
 )]
 #[GetCollection(
     output: ActivityCollectionResponseDto::class,
+    provider: Provider::class,
 )]
 #[Get(
     uriTemplate: '/activities/{uuid}',
@@ -34,6 +34,7 @@ use App\Validation\RegexValidations;
         'uuid' => RegexValidations::REGEX_UUID,
     ],
     output: ActivityResponseDto::class,
+    provider: Provider::class,
 )]
 #[Delete(
     uriVariables: [

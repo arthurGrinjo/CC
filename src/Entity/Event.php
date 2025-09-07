@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,18 +14,20 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
-#[ApiResource(operations: [])]
 #[Entity(repositoryClass: EventRepository::class)]
 class Event implements EntityInterface
 {
     use IdentifiableEntity;
 
-    #[Column(type: Types::TEXT, length: 180)]
+    #[Column(type: Types::STRING, length: 180)]
     private string $name;
 
     /** @var Collection<int, Participant> */
     #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
     private Collection $participants;
+
+    #[OneToMany(targetEntity: Comment::class, mappedBy: 'relatedId', cascade: ['persist'], fetch: 'LAZY', indexBy: self::class)]
+    private Collection $comments;
 
     public function __construct()
     {
@@ -52,4 +53,14 @@ class Event implements EntityInterface
     {
         return $this->participants;
     }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+
 }

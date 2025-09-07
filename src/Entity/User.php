@@ -4,31 +4,30 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Exception;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Uid\Uuid;
 
-#[ApiResource(operations: [])]
 #[Entity(repositoryClass: UserRepository::class)]
 class User implements EntityInterface, PasswordAuthenticatedUserInterface
 {
     use IdentifiableEntity;
 
-    #[Column(length: 180, unique: true, nullable: false)]
+    #[Column(type: Types::STRING, length: 180, unique: true, nullable: false)]
     private string $email;
 
-    #[Column(length: 64, nullable: false)]
+    #[Column(type: Types::STRING, length: 64, nullable: false)]
     private string $password;
 
-    #[Column(length: 60, nullable: true)]
+    #[Column(type: Types::STRING, length: 60, nullable: true)]
     private string $firstName = '';
 
-    #[Column(length: 60, nullable: true)]
+    #[Column(type: Types::STRING, length: 60, nullable: true)]
     private string $lastName = '';
 
     /**

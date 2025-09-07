@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\ClubRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,13 +14,12 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
-#[ApiResource(operations: [])]
 #[Entity(repositoryClass: ClubRepository::class)]
 class Club implements EntityInterface
 {
     use IdentifiableEntity;
 
-    #[Column(type: Types::TEXT, length: 180)]
+    #[Column(type: Types::STRING, length: 180)]
     private string $name;
 
     /** @var Collection<int, Member> */

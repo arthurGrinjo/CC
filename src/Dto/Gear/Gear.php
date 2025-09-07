@@ -19,7 +19,6 @@ use App\Validation\RegexValidations;
 
 #[ApiResource(
     shortName: 'gear',
-    provider: Provider::class,
     stateOptions: new Options(entityClass: GearEntity::class),
 )]
 #[Get(
@@ -31,6 +30,7 @@ use App\Validation\RegexValidations;
         'uuid' => RegexValidations::REGEX_UUID,
     ],
     output: GearResponseDto::class,
+    provider: Provider::class,
 )]
 #[Post(
     input: GearRequestDto::class,

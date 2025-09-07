@@ -3,8 +3,8 @@
 namespace App\Processor;
 
 use ApiPlatform\Validator\Exception\ValidationException;
-use App\Dto\ResponseDto;
 use App\Dto\RequestDto;
+use App\Dto\ResponseDto;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class Validator

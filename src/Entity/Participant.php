@@ -28,7 +28,7 @@ class Participant implements EntityInterface
     #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Event $event;
 
-    #[Column(length: 255)]
+    #[Column(length: 20)]
     private ParticipantRole $role;
 
     public function __construct()

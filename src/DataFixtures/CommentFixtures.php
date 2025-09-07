@@ -4,26 +4,29 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Factory\ParticipantFactory;
+use App\Factory\CommentFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ParticipantFixtures extends Fixture implements DependentFixtureInterface
+class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
-    const int NUMBER_OF_OBJECTS = 100;
+    const int NUMBER_OF_OBJECTS = 250;
 
     public function load(ObjectManager $manager): void
     {
         for ($i = 0; $i < self::NUMBER_OF_OBJECTS; $i++) {
-            ParticipantFactory::createOne();
+            CommentFactory::createOne();
         }
     }
 
     public function getDependencies(): array
     {
         return [
+            ActivityFixtures::class,
+            ClubFixtures::class,
             EventFixtures::class,
+            RouteFixtures::class,
             UserFixtures::class,
         ];
     }
