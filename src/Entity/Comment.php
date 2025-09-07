@@ -30,9 +30,9 @@ class Comment implements EntityInterface
     #[Column(length: 25)]
     private RelatedEntity $relatedEntity;
 
-    #[Column(type: Types::INTEGER)]
-    #[JoinColumn(referencedColumnName: 'id', nullable: false)]
-    private int $relatedId;
+    #[ManyToOne(targetEntity: Event::class, fetch: 'EAGER', inversedBy: 'comments')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private Event $related;
 
     public function __construct()
     {
@@ -72,14 +72,14 @@ class Comment implements EntityInterface
         return $this;
     }
 
-    public function getRelatedId(): int
+    public function getRelated(): Event
     {
-        return $this->relatedId;
+        return $this->related;
     }
 
-    public function setRelatedId(int $relatedId): self
+    public function setRelated(Event $related): self
     {
-        $this->relatedId = $relatedId;
+        $this->related = $related;
         return $this;
     }
 }

@@ -26,13 +26,15 @@ class Event implements EntityInterface
     #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
     private Collection $participants;
 
-    #[OneToMany(targetEntity: Comment::class, mappedBy: 'relatedId', cascade: ['persist'], fetch: 'LAZY', indexBy: self::class)]
+    /** @var Collection<int, Comment> */
+    #[OneToMany(targetEntity: Comment::class, mappedBy: 'related', cascade: ['persist'], fetch: 'LAZY')]
     private Collection $comments;
 
     public function __construct()
     {
         $this->uuid = Uuid::v6();
         $this->participants = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getName(): string

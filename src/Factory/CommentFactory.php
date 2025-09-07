@@ -25,14 +25,16 @@ final class CommentFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array
     {
-        /** @var RelatedEntity $entityToComment */
-        $entityToComment = self::faker()->randomElement(RelatedEntity::cases());
+//        /** @var RelatedEntity $entityToComment */
+//        $entityToComment = self::faker()->randomElement(RelatedEntity::cases());
 
         return [
             'comment' => 'Comment-' . self::faker()->text(),
             'commenter' => repository(User::class)->random(),
-            'relatedEntity' => $entityToComment,
-            'relatedId' => repository($entityToComment->value)->random()->getId(),
+            'relatedEntity' => RelatedEntity::EVENT,
+            'related' => repository(RelatedEntity::EVENT->value)->random(),
+//            'relatedEntity' => $entityToComment,
+//            'relatedId' => repository($entityToComment->value)->random()->getId(),
         ];
     }
 }

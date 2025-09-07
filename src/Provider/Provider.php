@@ -94,9 +94,9 @@ final readonly class Provider implements ProviderInterface
             | InvalidArgumentException
             | ReflectionException
             | RuntimeException
-            | UnexpectedTypeException
+            | UnexpectedTypeException $e
         ) {
-            throw new RuntimeException('Unable to provide: ' . serialize($context));
+            throw new RuntimeException('Unable to provide: ' . $e->getMessage());
         }
     }
 }
