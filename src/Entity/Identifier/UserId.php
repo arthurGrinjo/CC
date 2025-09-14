@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Identifiers;
+namespace App\Entity\Identifier;
 
 use App\Entity\User;
 use Symfony\Component\Uid\Uuid;

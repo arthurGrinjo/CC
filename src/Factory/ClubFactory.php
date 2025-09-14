@@ -23,7 +23,7 @@ final class ClubFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
-            'name' => 'Club-' . self::faker()->text(20),
+            'name' => 'Commentable-' . self::faker()->text(20),
         ];
     }
 }

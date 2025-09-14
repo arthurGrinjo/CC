@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Extension\Commentable;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\RouteRepository;
 use Doctrine\DBAL\Types\Types;
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: RouteRepository::class)]
-class Route implements EntityInterface
+class Route extends Commentable implements EntityInterface
 {
     use IdentifiableEntity;
 

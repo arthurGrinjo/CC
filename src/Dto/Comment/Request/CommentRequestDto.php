@@ -7,7 +7,7 @@ namespace App\Dto\Comment\Request;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\RequestDto;
 use App\Entity\Enum\RelatedEntity;
-use App\Entity\Identifiers\UserId;
+use App\Entity\Identifier\UserId;
 
 #[ApiResource(
     shortName: 'comment',

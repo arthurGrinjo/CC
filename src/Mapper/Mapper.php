@@ -7,7 +7,7 @@ namespace App\Mapper;
 use App\Dto\RequestDto;
 use App\Dto\ResponseDto;
 use App\Entity\EntityInterface;
-use App\Entity\Identifiers\IdentifierInterface;
+use App\Entity\Identifier\IdentifierInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use ReflectionClass;

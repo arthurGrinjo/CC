@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Identifiers;
+namespace App\Entity\Identifier;
 
 use App\Entity\Club;
 use Symfony\Component\Uid\Uuid;

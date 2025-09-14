@@ -7,8 +7,8 @@ namespace App\Dto\Participant\Request;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\RequestDto;
 use App\Entity\Enum\ParticipantRole;
-use App\Entity\Identifiers\EventId;
-use App\Entity\Identifiers\UserId;
+use App\Entity\Identifier\EventId;
+use App\Entity\Identifier\UserId;
 
 #[ApiResource(
     shortName: 'participant',

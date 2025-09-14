@@ -33,9 +33,7 @@ final class MemberFactory extends PersistentProxyObjectFactory
             $member = $this->createMember();
         }
 
-        return array_merge(
-            $member,
-        );
+        return $member;
     }
 
     /**

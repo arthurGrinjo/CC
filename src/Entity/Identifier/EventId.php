@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Identifiers;
+namespace App\Entity\Identifier;
 
 use App\Entity\Event;
 use Symfony\Component\Uid\Uuid;

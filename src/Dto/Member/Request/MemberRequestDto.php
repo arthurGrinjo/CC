@@ -6,8 +6,8 @@ namespace App\Dto\Member\Request;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\RequestDto;
-use App\Entity\Identifiers\ClubId;
-use App\Entity\Identifiers\UserId;
+use App\Entity\Identifier\ClubId;
+use App\Entity\Identifier\UserId;
 
 #[ApiResource(
     shortName: 'participant',
