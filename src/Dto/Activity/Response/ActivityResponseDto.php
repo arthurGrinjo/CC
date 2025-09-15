@@ -7,6 +7,7 @@ namespace App\Dto\Activity\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use App\Dto\Chat\Response\ChatResponseDto;
 use App\Dto\ResponseDto;
 use App\Entity\Activity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -27,5 +28,9 @@ final readonly class ActivityResponseDto implements ResponseDto
 
         #[SerializedName('name'), Assert\NotBlank]
         public string $name,
+
+        #[SerializedName('chat')]
+        #[ApiProperty(readableLink: false)]
+        public ?ChatResponseDto $chat = null,
     ) {}
 }

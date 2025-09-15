@@ -9,6 +9,7 @@ use App\Dto\ResponseDto;
 use App\Entity\EntityInterface;
 use App\Entity\Identifier\IdentifierInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
@@ -47,6 +48,7 @@ readonly class Mapper
         }
 
         foreach ($responseDto->getConstructor()->getParameters() as $property) {
+            $propertyValue = $this->propertyAccessor->getValue($entity, $property->name);
             if (
                 $property->getType() instanceof ReflectionType
                 && method_exists($property->getType(), 'isBuiltin')
@@ -55,8 +57,8 @@ readonly class Mapper
                 && is_string($property->getType()->getName())
                 && class_exists($property->getType()->getName())
                 && (new ReflectionClass($property->getType()->getName()))->implementsInterface(ResponseDto::class)
+                && $this->propertyAccessor->getValue($entity, $property->name) !== null
             ) {
-                $propertyValue = $this->propertyAccessor->getValue($entity, $property->name);
                 $construct[] = ($propertyValue instanceof EntityInterface)
                     ? $this->entityToDto(
                         entity: $propertyValue,
@@ -70,7 +72,12 @@ readonly class Mapper
                 continue;
             }
 
-            $construct[] = $this->propertyAccessor->getValue($entity, $property->name);
+            $construct[] = (!$propertyValue instanceof PersistentCollection)
+                ? $propertyValue
+                : throw new ReflectionException(
+                    'Not allowed to set Collection as property value: '. $property->getName()
+                )
+            ;
         }
 
         $response = $responseDto->newInstance(...$construct);

@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     shortName: 'member',
     operations: [],
-    stateOptions: new Options(Member::class),
+    stateOptions: new Options(entityClass: Member::class),
 )]
 final readonly class MemberResponseDto implements ResponseDto
 {

@@ -22,7 +22,7 @@ class Activity extends Commentable implements EntityInterface
     #[Column(type: Types::STRING, length: 180)]
     private string $name;
 
-    #[ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
+    #[ManyToOne(targetEntity: User::class)]
     #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private User $user;
 

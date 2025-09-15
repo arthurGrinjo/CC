@@ -26,7 +26,7 @@ class Chat implements EntityInterface
     private string $entity;
 
     /** @var Collection<int, Comment> */
-    #[OneToMany(targetEntity: Comment::class, mappedBy: 'chat', cascade: ['persist'], fetch: 'LAZY')]
+    #[OneToMany(targetEntity: Comment::class, mappedBy: 'chat', cascade: ['persist'])]
     private Collection $comments;
 
     public function __construct()

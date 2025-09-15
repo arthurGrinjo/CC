@@ -8,9 +8,8 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\ResponseDto;
+use App\Dto\User\Response\UserResponseDto;
 use App\Entity\Comment;
-use App\Entity\Enum\RelatedEntity;
-use App\Entity\Event;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     shortName: 'comment',
     operations: [],
-    stateOptions: new Options(Comment::class),
+    stateOptions: new Options(entityClass: Comment::class),
 )]
 final readonly class CommentResponseDto implements ResponseDto
 {
@@ -30,14 +29,8 @@ final readonly class CommentResponseDto implements ResponseDto
         #[SerializedName('comment'), Assert\NotBlank]
         public string $comment,
 
-        #[SerializedName('commenter'), Assert\NotBlank]
+        #[SerializedName('user'), Assert\NotBlank]
         #[ApiProperty(readableLink: true)]
-        public UserResponseDto $commenter,
-
-//        #[SerializedName('relatedEntity'), Assert\NotBlank]
-//        public RelatedEntity $relatedEntity,
-//
-//        #[SerializedName('related'), Assert\NotBlank]
-//        public Event $related,
+        public UserResponseDto $user,
     ) {}
 }

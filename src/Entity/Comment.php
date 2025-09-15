@@ -21,8 +21,8 @@ class Comment implements EntityInterface
     #[Column(type: Types::TEXT, length: 180)]
     private string $comment;
 
-    #[ManyToOne(targetEntity: Chat::class, fetch: 'EAGER', inversedBy: 'comments')]
-    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ManyToOne(targetEntity: Chat::class, inversedBy: 'comments')]
+    #[JoinColumn(name: 'chat_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Chat $chat;
 
     #[ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
@@ -43,11 +43,6 @@ class Comment implements EntityInterface
     {
         $this->comment = $comment;
         return $this;
-    }
-
-    public function getChat(): Chat
-    {
-        return $this->chat;
     }
 
     public function setChat(Chat $chat): self
