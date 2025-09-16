@@ -14,12 +14,19 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'route',
+    shortName: self::SHORT_NAME,
     operations: [],
     stateOptions: new Options(entityClass: Route::class),
 )]
 final readonly class RouteCollectionResponseDto implements ResponseDto
 {
+    const string SHORT_NAME = 'route';
+
+    public function getShortName(): string
+    {
+        return self::SHORT_NAME;
+    }
+
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]

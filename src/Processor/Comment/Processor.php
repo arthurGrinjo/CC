@@ -6,10 +6,8 @@ namespace App\Processor\Comment;
 
 use ApiPlatform\Doctrine\Common\State\RemoveProcessor;
 use ApiPlatform\Doctrine\Orm\State\Options;
-use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use App\Dto\RequestDto;
 use App\Dto\ResponseDto;
@@ -22,7 +20,6 @@ use ReflectionException;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -62,19 +59,12 @@ readonly class Processor extends Validator implements ProcessorInterface
             throw new RuntimeException('Provider: Not a valid EntityClass.');
         }
 
-        switch(true) {
-            case (
-                $operation instanceof Post
-                || $operation instanceof Put
-            ) && $data instanceof RequestDto:
-                $this->validateDto($data);
-                return $this->updateOrCreate($entityClass, $data, $operation, $uriVariables, $context);
-            case $operation instanceof Delete:
-                $this->removeProcessor->process($data, $operation, $uriVariables, $context);
-                return Response::HTTP_NO_CONTENT;
-            default:
-                throw new RuntimeException('Cannot process this request.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        if (!$operation instanceof Post && $data instanceof RequestDto) {
+            throw new RuntimeException(sprintf('Operation not allowed: %s', $operation->getName()));
         }
+
+        $this->validateDto($data);
+        return $this->updateOrCreate($entityClass, $data, $operation, $uriVariables, $context);
     }
 
     /**
@@ -94,11 +84,6 @@ readonly class Processor extends Validator implements ProcessorInterface
             $entity = null;
             if ($operation instanceof Post) {
                 $entity = new $entityClass;
-            }
-
-            if ($operation instanceof Put) {
-                $repo = $this->entityManager->getRepository($entityClass);
-                $entity = $repo->findOneBy($uriVariables);
             }
 
             ($data instanceof RequestDto && $entity instanceof EntityInterface)

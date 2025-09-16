@@ -6,4 +6,5 @@ namespace App\Dto;
 
 interface ResponseDto
 {
+    public function getShortName(): string;
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Chat;
-use App\Entity\Enum\RelatedEntity;
+use App\Entity\Enum\CommentableEntities;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use function Zenstruck\Foundry\Persistence\repository;
 
@@ -24,8 +24,8 @@ final class ChatFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array
     {
-        /** @var RelatedEntity $entityToComment */
-        $entityToComment = self::faker()->randomElement(RelatedEntity::cases());
+        /** @var CommentableEntities $entityToComment */
+        $entityToComment = self::faker()->randomElement(CommentableEntities::cases());
 
         return [
             'entityId' => repository($entityToComment->value)->random()->getId(),

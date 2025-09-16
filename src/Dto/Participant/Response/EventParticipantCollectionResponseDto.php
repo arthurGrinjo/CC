@@ -16,12 +16,19 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'participant',
+    shortName: self::SHORT_NAME,
     operations: [],
     stateOptions: new Options(Participant::class),
 )]
 final readonly class EventParticipantCollectionResponseDto implements ResponseDto
 {
+    const string SHORT_NAME = 'participant';
+
+    public function getShortName(): string
+    {
+        return self::SHORT_NAME;
+    }
+
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]

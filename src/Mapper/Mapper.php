@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Mapper;
 
+use ApiPlatform\Metadata\IriConverterInterface;
 use App\Dto\RequestDto;
 use App\Dto\ResponseDto;
 use App\Entity\EntityInterface;
 use App\Entity\Identifier\IdentifierInterface;
+use App\Validation\RegexValidations;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use InvalidArgumentException;
@@ -23,6 +25,7 @@ readonly class Mapper
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private IriConverterInterface $iriConverter,
         private PropertyAccessorInterface $propertyAccessor,
     ) {}
 
@@ -68,7 +71,6 @@ readonly class Mapper
                         'Entity to DTO error, invalid input: '. $property->getType()->getName()
                     )
                 ;
-
                 continue;
             }
 
@@ -99,6 +101,19 @@ readonly class Mapper
         foreach ($data as $property) {
             $value = $this->propertyAccessor->getValue($dto, $property->name);
 
+            if (is_string($value) && preg_match(pattern: RegexValidations::URI, subject: $value)) {
+                /** @var ResponseDto $resource */
+                $resource = $this->iriConverter->getResourceFromIri($value);
+                try {
+                    $value = $this->entityManager->getRepository(
+                        'App\\Entity\\'. ucfirst($resource->getShortName())
+                    )->findOneBy(['uuid' => $resource->uuid]);
+                } catch (ReflectionException $e) {
+                    //do nothing
+                }
+            }
+
+            /** todo: remove this manner of getting an entity */
             if ($value instanceof IdentifierInterface && $value instanceof Uuid) {
                 /** @phpstan-var class-string $entityClass */
                 $entityClass = $value->getClass();

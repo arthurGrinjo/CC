@@ -35,7 +35,7 @@ class RegexValidations
     final public const REGEX_URL = '^https?(?:\:\/\/)?[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^!=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])+$';
 
     // phpcs:ignore
-    final public const REGEX_URI = '^\/([a-zA-Z0-9_\.~-]+)\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$';
+    final public const REGEX_URI = '^\/api\/([a-zA-Z0-9_\.~-]+)\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$';
 
 
 

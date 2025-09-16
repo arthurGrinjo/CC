@@ -9,7 +9,7 @@ use App\Entity\Article;
 use App\Entity\Event;
 use App\Entity\Route;
 
-enum RelatedEntity: string
+enum CommentableEntities: string
 {
     case ACTIVITY = Activity::class;
     case ARTICLE = Article::class;

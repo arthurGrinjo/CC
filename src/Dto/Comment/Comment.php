@@ -12,10 +12,9 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use App\Dto\Comment\Request\CommentRequestDto;
 use App\Dto\Comment\Response\CommentResponseDto;
-use App\Entity\Activity as ActivityEntity;
 use App\Entity\Chat as ChatEntity;
 use App\Entity\Comment as CommentEntity;
-use App\Processor\Comment\Processor;
+use App\Processor\Comment\Processor as CommentProcessor;
 use App\Processor\StandardProcessor;
 use App\Provider\Provider;
 use App\Validation\RegexValidations;
@@ -53,7 +52,7 @@ use App\Validation\RegexValidations;
     uriTemplate: '/comments',
     input: CommentRequestDto::class,
     output: CommentResponseDto::class,
-    processor: Processor::class,
+    processor: CommentProcessor::class,
 )]
 #[Delete(
     uriVariables: [

@@ -15,12 +15,19 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'comment',
+    shortName: self::SHORT_NAME,
     operations: [],
     stateOptions: new Options(entityClass: Comment::class),
 )]
 final readonly class CommentResponseDto implements ResponseDto
 {
+    const string SHORT_NAME = 'comment';
+
+    public function getShortName(): string
+    {
+        return self::SHORT_NAME;
+    }
+
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]
