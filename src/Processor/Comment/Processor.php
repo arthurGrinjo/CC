@@ -64,7 +64,13 @@ readonly class Processor extends Validator implements ProcessorInterface
         }
 
         $this->validateDto($data);
-        return $this->updateOrCreate($entityClass, $data, $operation, $uriVariables, $context);
+
+        /**
+         * - getOrCreateChat
+         * - updateOrCreateComment
+         */
+
+        return $this->updateOrCreateComment($entityClass, $data, $operation, $uriVariables, $context);
     }
 
     /**
@@ -73,7 +79,7 @@ readonly class Processor extends Validator implements ProcessorInterface
      * @param array<string, mixed>&array{request?: Request, previous_data?: mixed, resource_class?: string|null, original_data?: mixed} $context
      * @throws RuntimeException
      */
-    private function updateOrCreate(
+    private function updateOrCreateComment(
         string $entityClass,
         mixed $data,
         Operation $operation,

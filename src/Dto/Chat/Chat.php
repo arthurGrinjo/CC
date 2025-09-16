@@ -13,7 +13,7 @@ use App\Processor\StandardProcessor;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'chat',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: ChatEntity::class),
 )]
 
@@ -26,4 +26,6 @@ use App\Validation\RegexValidations;
     ],
     processor: StandardProcessor::class,
 )]
-final readonly class Chat {}
+final readonly class Chat {
+    const string SHORT_NAME = 'chat';
+}

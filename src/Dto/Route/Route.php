@@ -21,7 +21,7 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'route',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: RouteEntity::class),
 )]
 #[GetCollection(
@@ -64,4 +64,6 @@ use App\Validation\RegexValidations;
     ],
     processor: StandardProcessor::class,
 )]
-final readonly class Route {}
+final readonly class Route {
+    const string SHORT_NAME = 'route';
+}

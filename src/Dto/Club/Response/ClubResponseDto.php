@@ -7,24 +7,23 @@ namespace App\Dto\Club\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use App\Dto\Club\Club;
 use App\Dto\ResponseDto;
-use App\Entity\Club;
+use App\Entity\Club as ClubEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: self::SHORT_NAME,
+    shortName: Club::SHORT_NAME,
     operations: [],
-    stateOptions: new Options(entityClass: Club::class),
+    stateOptions: new Options(entityClass: ClubEntity::class),
 )]
 final readonly class ClubResponseDto implements ResponseDto
 {
-    const string SHORT_NAME = 'club';
-
     public function getShortName(): string
     {
-        return self::SHORT_NAME;
+        return Club::SHORT_NAME;
     }
 
     public function __construct(

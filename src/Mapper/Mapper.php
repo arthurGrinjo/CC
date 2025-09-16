@@ -101,6 +101,7 @@ readonly class Mapper
         foreach ($data as $property) {
             $value = $this->propertyAccessor->getValue($dto, $property->name);
 
+            /** Get value bij IRI */
             if (is_string($value) && preg_match(pattern: RegexValidations::URI, subject: $value)) {
                 /** @var ResponseDto $resource */
                 $resource = $this->iriConverter->getResourceFromIri($value);
@@ -113,7 +114,7 @@ readonly class Mapper
                 }
             }
 
-            /** todo: remove this manner of getting an entity */
+            /** Get value bij class identifier */
             if ($value instanceof IdentifierInterface && $value instanceof Uuid) {
                 /** @phpstan-var class-string $entityClass */
                 $entityClass = $value->getClass();

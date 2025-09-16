@@ -7,24 +7,23 @@ namespace App\Dto\Event\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use App\Dto\Event\Event;
 use App\Dto\ResponseDto;
-use App\Entity\Event;
+use App\Entity\Event as EventEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: self::SHORT_NAME,
+    shortName: Event::SHORT_NAME,
     operations: [],
-    stateOptions: new Options(entityClass: Event::class),
+    stateOptions: new Options(entityClass: EventEntity::class),
 )]
 final readonly class EventCollectionResponseDto implements ResponseDto
 {
-    const string SHORT_NAME = 'event';
-
     public function getShortName(): string
     {
-        return self::SHORT_NAME;
+        return Event::SHORT_NAME;
     }
 
     public function __construct(

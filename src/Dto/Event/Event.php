@@ -21,7 +21,7 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'event',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: EventEntity::class),
 )]
 #[GetCollection(
@@ -64,4 +64,6 @@ use App\Validation\RegexValidations;
     ],
     processor: StandardProcessor::class,
 )]
-final readonly class Event {}
+final readonly class Event {
+    const string SHORT_NAME = 'event';
+}

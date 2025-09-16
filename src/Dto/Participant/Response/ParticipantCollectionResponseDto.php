@@ -8,26 +8,25 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\Event\Response\EventResponseDto;
+use App\Dto\Participant\Participant;
 use App\Dto\ResponseDto;
 use App\Dto\User\Response\UserResponseDto;
 use App\Entity\Enum\ParticipantRole;
-use App\Entity\Participant;
+use App\Entity\Participant as ParticipantEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: self::SHORT_NAME,
+    shortName: Participant::SHORT_NAME,
     operations: [],
-    stateOptions: new Options(Participant::class),
+    stateOptions: new Options(ParticipantEntity::class),
 )]
 final readonly class ParticipantCollectionResponseDto implements ResponseDto
 {
-    const string SHORT_NAME = 'participant';
-
     public function getShortName(): string
     {
-        return self::SHORT_NAME;
+        return Participant::SHORT_NAME;
     }
 
     public function __construct(

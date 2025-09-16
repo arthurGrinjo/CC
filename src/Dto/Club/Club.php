@@ -21,7 +21,7 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'club',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: ClubEntity::class),
 )]
 #[GetCollection(
@@ -64,4 +64,6 @@ use App\Validation\RegexValidations;
     ],
     processor: StandardProcessor::class,
 )]
-final readonly class Club {}
+final readonly class Club {
+    const string SHORT_NAME = 'club';
+}

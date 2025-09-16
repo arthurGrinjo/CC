@@ -7,24 +7,23 @@ namespace App\Dto\Chat\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use App\Dto\Chat\Chat;
 use App\Dto\ResponseDto;
-use App\Entity\Chat;
+use App\Entity\Chat as ChatEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: self::SHORT_NAME,
+    shortName: Chat::SHORT_NAME,
     operations: [],
-    stateOptions: new Options(entityClass: Chat::class),
+    stateOptions: new Options(entityClass: ChatEntity::class),
 )]
 final readonly class ChatResponseDto implements ResponseDto
 {
-    const string SHORT_NAME = 'chat';
-
     public function getShortName(): string
     {
-        return self::SHORT_NAME;
+        return Chat::SHORT_NAME;
     }
 
     public function __construct(

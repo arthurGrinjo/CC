@@ -18,7 +18,7 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'gear',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: GearEntity::class),
 )]
 #[Get(
@@ -46,4 +46,6 @@ use App\Validation\RegexValidations;
     ],
     processor: StandardProcessor::class,
 )]
-final readonly class Gear {}
+final readonly class Gear {
+    const string SHORT_NAME = 'gear';
+}

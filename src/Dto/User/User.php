@@ -24,7 +24,7 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'user',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: UserEntity::class),
 )]
 #[ApiFilter(SearchFilter::class, properties: [
@@ -70,4 +70,6 @@ use App\Validation\RegexValidations;
     ],
     processor: StandardProcessor::class,
 )]
-final readonly class User {}
+final readonly class User {
+    const string SHORT_NAME = 'user';
+}

@@ -24,7 +24,7 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'member',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: MemberEntity::class),
 )]
 #[ApiFilter(SearchFilter::class, properties: [
@@ -72,4 +72,6 @@ use App\Validation\RegexValidations;
     output: ClubMemberCollectionResponseDto::class,
     provider: Provider::class,
 )]
-final readonly class Member {}
+final readonly class Member {
+    const string SHORT_NAME = 'member';
+}

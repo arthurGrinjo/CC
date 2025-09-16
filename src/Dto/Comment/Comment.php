@@ -20,34 +20,9 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'comment',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: CommentEntity::class),
 )]
-#[GetCollection(
-    uriTemplate: '/chats/{uuid}/comments',
-    uriVariables: [
-        'uuid' => new Link(fromProperty: 'comments', fromClass: ChatEntity::class, identifiers: ['uuid']),
-    ],
-    requirements: [
-        'uuid' => RegexValidations::REGEX_UUID,
-    ],
-    output: CommentResponseDto::class,
-    provider: Provider::class,
-)]
-
-/** todo: Create CommentProvider to convert entity to Chat-entity */
-//#[GetCollection(
-//    uriTemplate: '/activities/{uuid}/comments',
-//    uriVariables: [
-//        'uuid' => new Link(fromProperty: 'comments', fromClass: ActivityEntity::class, identifiers: ['uuid']),
-//    ],
-//    requirements: [
-//        'uuid' => RegexValidations::REGEX_UUID,
-//    ],
-//    output: CommentResponseDto::class,
-//    provider: Provider::class,
-//)]
-
 #[Post(
     uriTemplate: '/comments',
     input: CommentRequestDto::class,
@@ -63,4 +38,18 @@ use App\Validation\RegexValidations;
     ],
     processor: StandardProcessor::class,
 )]
-final readonly class Comment {}
+
+#[GetCollection(
+    uriTemplate: '/chats/{uuid}/comments',
+    uriVariables: [
+        'uuid' => new Link(fromProperty: 'comments', fromClass: ChatEntity::class, identifiers: ['uuid']),
+    ],
+    requirements: [
+        'uuid' => RegexValidations::REGEX_UUID,
+    ],
+    output: CommentResponseDto::class,
+    provider: Provider::class,
+)]
+final readonly class Comment {
+    const string SHORT_NAME = 'comment';
+}
