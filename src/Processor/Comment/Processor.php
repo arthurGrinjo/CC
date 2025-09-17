@@ -9,9 +9,14 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
+use App\Dto\Comment\Response\CommentResponseDto;
 use App\Dto\RequestDto;
 use App\Dto\ResponseDto;
+use App\Entity\Chat;
+use App\Entity\Comment;
 use App\Entity\EntityInterface;
+use App\Entity\Extension\Commentable;
+use App\Entity\User;
 use App\Mapper\Mapper;
 use App\Processor\Validator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,15 +35,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 readonly class Processor extends Validator implements ProcessorInterface
 {
-    /**
-     * @param ProcessorInterface<T1, T2> $persistProcessor
-     */
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Mapper $mapper,
-        #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
-        private ProcessorInterface $persistProcessor,
-        private RemoveProcessor $removeProcessor,
         protected ValidatorInterface $validator,
     ) {
         parent::__construct($validator);
@@ -47,6 +46,7 @@ readonly class Processor extends Validator implements ProcessorInterface
     /**
      * @inheritDoc
      * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ResponseDto|int
     {
@@ -65,55 +65,35 @@ readonly class Processor extends Validator implements ProcessorInterface
 
         $this->validateDto($data);
 
-        /**
-         * - getOrCreateChat
-         * - updateOrCreateComment
-         */
+        $entity = $this->mapper->getObjectFromIri($data->entity);
+        $user = $this->mapper->getObjectFromIri($data->user);
 
-        return $this->updateOrCreateComment($entityClass, $data, $operation, $uriVariables, $context);
-    }
-
-    /**
-     * @param T1 $data
-     * @param array<string, mixed> $uriVariables
-     * @param array<string, mixed>&array{request?: Request, previous_data?: mixed, resource_class?: string|null, original_data?: mixed} $context
-     * @throws RuntimeException
-     */
-    private function updateOrCreateComment(
-        string $entityClass,
-        mixed $data,
-        Operation $operation,
-        array $uriVariables,
-        array $context,
-    ): ResponseDto {
-        try {
-            $entity = null;
-            if ($operation instanceof Post) {
-                $entity = new $entityClass;
-            }
-
-            ($data instanceof RequestDto && $entity instanceof EntityInterface)
-                ? $this->mapper->merge(
-                    dto: $data,
-                    entity: $entity,
-                )
-                : throw new ReflectionException('Invalid input dto.')
-            ;
-
-            return (
-                is_array($operation->getOutput())
-                && array_key_exists('class', $operation->getOutput())
-                && is_string($operation->getOutput()['class'])
-                && class_exists($operation->getOutput()['class'])
-            )
-                ? $this->mapper->entityToDto(
-                    entity: $this->persistProcessor->process($entity, $operation, $uriVariables, $context),
-                    target: $operation->getOutput()['class'],
-                )
-                : throw new RuntimeException('Invalid output class, create: ' . $entityClass)
-            ;
-        } catch (InvalidMagicMethodCall|ReflectionException|RuntimeException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode());
+        if (!$entity instanceof Commentable || !$user instanceof User) {
+            throw new RuntimeException('error!');
         }
+
+        $chat = $entity->getChat() ?: (new Chat())
+            ->setEntity(get_class($entity))
+            ->setEntityId($entity->getId())
+        ;
+        $this->entityManager->persist($chat);
+
+        $entity->setChat($chat);
+        $this->entityManager->persist($entity);
+
+        $comment = (new Comment)
+            ->setComment($data->comment)
+            ->setChat($chat)
+            ->setUser($user)
+        ;
+        $this->entityManager->persist($comment);
+
+        /** Save chat, comment, commented entity */
+        $this->entityManager->flush();
+
+        return $this->mapper->entityToDto(
+            entity: $comment,
+            target: CommentResponseDto::class,
+        );
     }
 }

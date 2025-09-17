@@ -7,7 +7,7 @@ namespace App\Dto\Club\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Club\Club;
+use App\Dto\Club;
 use App\Dto\ResponseDto;
 use App\Entity\Club as ClubEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final readonly class ClubResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
     public function getShortName(): string
     {
         return Club::SHORT_NAME;

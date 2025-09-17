@@ -7,7 +7,7 @@ namespace App\Dto\Gear\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Gear\Gear;
+use App\Dto\Gear;
 use App\Dto\ResponseDto;
 use App\Entity\Gear as GearEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final readonly class GearResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
     public function getShortName(): string
     {
         return Gear::SHORT_NAME;

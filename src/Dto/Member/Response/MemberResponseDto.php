@@ -8,7 +8,7 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\Club\Response\ClubResponseDto;
-use App\Dto\Member\Member;
+use App\Dto\Member;
 use App\Dto\ResponseDto;
 use App\Dto\User\Response\UserResponseDto;
 use App\Entity\Member as MemberEntity;
@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final readonly class MemberResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
     public function getShortName(): string
     {
         return Member::SHORT_NAME;

@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\IriConverterInterface;
 use App\Dto\RequestDto;
 use App\Dto\ResponseDto;
 use App\Entity\EntityInterface;
-use App\Entity\Identifier\IdentifierInterface;
 use App\Validation\RegexValidations;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
@@ -19,7 +18,6 @@ use ReflectionType;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\Uuid;
 
 readonly class Mapper
 {
@@ -102,28 +100,33 @@ readonly class Mapper
             $value = $this->propertyAccessor->getValue($dto, $property->name);
 
             /** Get value bij IRI */
-            if (is_string($value) && preg_match(pattern: RegexValidations::URI, subject: $value)) {
-                /** @var ResponseDto $resource */
-                $resource = $this->iriConverter->getResourceFromIri($value);
-                try {
-                    $value = $this->entityManager->getRepository(
-                        'App\\Entity\\'. ucfirst($resource->getShortName())
-                    )->findOneBy(['uuid' => $resource->uuid]);
-                } catch (ReflectionException $e) {
-                    //do nothing
-                }
+            if (is_string($value) && preg_match(pattern: RegexValidations::IRI, subject: $value)) {
+                $value = $this->getObjectFromIri($value);
             }
 
-            /** Get value bij class identifier */
-            if ($value instanceof IdentifierInterface && $value instanceof Uuid) {
-                /** @phpstan-var class-string $entityClass */
-                $entityClass = $value->getClass();
-                $repository = $this->entityManager->getRepository($entityClass);
-                $value = $repository->findOneBy(['uuid' => $value]);
-            }
             $this->propertyAccessor->setValue($entity, $property->name, $value);
         }
 
         return $entity;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function getObjectFromIri(string $iri): EntityInterface
+    {
+        $resource = $this->iriConverter->getResourceFromIri($iri);
+
+        if (!$resource instanceof ResponseDto) {
+            throw new InvalidArgumentException('Invalid IRI: ' . $iri);
+        }
+
+        if (!property_exists($resource, 'uuid')) {
+            throw new InvalidArgumentException('No identifier found in DTO: ' . $iri);
+        }
+
+        return $this->entityManager->getRepository(
+            'App\\Entity\\'. ucfirst($resource->getShortName())
+        )->findOneBy(['uuid' => $resource->uuid]);
     }
 }

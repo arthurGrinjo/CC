@@ -21,8 +21,9 @@ class Commentable
         return $this->chat;
     }
 
-    public function setChat(Chat $chat): void
+    public function setChat(Chat $chat): self
     {
         $this->chat = $chat;
+        return $this;
     }
 }

@@ -8,7 +8,7 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\ResponseDto;
-use App\Dto\Route\Route;
+use App\Dto\Route;
 use App\Entity\Route as RouteEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final readonly class RouteResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
     public function getShortName(): string
     {
         return Route::SHORT_NAME;

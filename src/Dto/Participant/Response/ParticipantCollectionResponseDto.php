@@ -8,7 +8,7 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\Event\Response\EventResponseDto;
-use App\Dto\Participant\Participant;
+use App\Dto\Participant;
 use App\Dto\ResponseDto;
 use App\Dto\User\Response\UserResponseDto;
 use App\Entity\Enum\ParticipantRole;
@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final readonly class ParticipantCollectionResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
     public function getShortName(): string
     {
         return Participant::SHORT_NAME;

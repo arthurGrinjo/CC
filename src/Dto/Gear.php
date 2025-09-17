@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\Gear;
+namespace App\Dto;
 
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiResource;

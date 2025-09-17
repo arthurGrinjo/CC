@@ -40,9 +40,10 @@ class Chat implements EntityInterface
         return $this->entityId;
     }
 
-    public function setEntityId(int $entityId): void
+    public function setEntityId(int $entityId): self
     {
         $this->entityId = $entityId;
+        return $this;
     }
 
     public function getEntity(): string
@@ -50,9 +51,10 @@ class Chat implements EntityInterface
         return $this->entity;
     }
 
-    public function setEntity(string $entity): void
+    public function setEntity(string $entity): self
     {
         $this->entity = $entity;
+        return $this;
     }
 
     public function getComments(): Collection

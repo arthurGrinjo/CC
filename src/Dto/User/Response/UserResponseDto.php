@@ -8,7 +8,7 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Dto\ResponseDto;
-use App\Dto\User\User;
+use App\Dto\User;
 use App\Entity\User as UserEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class UserResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
     public function getShortName(): string
     {
         return User::SHORT_NAME;

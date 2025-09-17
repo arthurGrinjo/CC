@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\Member;
+namespace App\Dto;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;

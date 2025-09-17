@@ -7,7 +7,7 @@ namespace App\Dto\Event\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Dto\Event\Event;
+use App\Dto\Event;
 use App\Dto\ResponseDto;
 use App\Entity\Event as EventEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final readonly class EventResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
     public function getShortName(): string
     {
         return Event::SHORT_NAME;
