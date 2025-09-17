@@ -34,6 +34,9 @@ class RegexValidations
     // phpcs:ignore
     final public const REGEX_URL = '^https?(?:\:\/\/)?[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^!=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])+$';
 
+    // phpcs:ignore
+    final public const REGEX_IRI = '^\/api\/([a-zA-Z0-9_\.~-]+)\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$';
+
 
 
     final public const GENERIC_STRING = '/' . self::REGEX_GENERIC_STRING . '/';
@@ -59,4 +62,6 @@ class RegexValidations
     final public const IBAN = '/' . self::REGEX_IBAN . '/';
 
     final public const URL = '/' . self::REGEX_URL . '/';
+
+    final public const IRI = '/' . self::REGEX_IRI . '/';
 }

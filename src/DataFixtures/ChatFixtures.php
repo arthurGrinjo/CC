@@ -5,23 +5,27 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\DataFixtures\Trait\Numbers;
-use App\Factory\GearFactory;
+use App\Factory\ChatFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class GearFixtures extends Fixture implements DependentFixtureInterface
+class ChatFixtures extends Fixture implements DependentFixtureInterface
 {
     use Numbers;
 
     public function load(ObjectManager $manager): void
     {
-        GearFactory::createMany(self::GEARS * self::MULTIPLIER);
+        ChatFactory::createMany(self::CHATS * self::MULTIPLIER);
     }
 
     public function getDependencies(): array
     {
         return [
+            ActivityFixtures::class,
+            ClubFixtures::class,
+            EventFixtures::class,
+            RouteFixtures::class,
             UserFixtures::class,
         ];
     }

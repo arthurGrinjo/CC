@@ -7,19 +7,26 @@ namespace App\Dto\Article\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use App\Dto\Article;
 use App\Dto\ResponseDto;
-use App\Entity\Article;
+use App\Entity\Article as ArticleEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'article',
+    shortName: Article::SHORT_NAME,
     operations: [],
-    stateOptions: new Options(entityClass: Article::class),
+    stateOptions: new Options(entityClass: ArticleEntity::class),
 )]
 final readonly class ArticleCollectionResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
+    public function getShortName(): string
+    {
+        return Article::SHORT_NAME;
+    }
+
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]

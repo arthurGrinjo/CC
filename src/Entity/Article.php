@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Extension\Commentable;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: ArticleRepository::class)]
-class Article implements EntityInterface
+class Article extends Commentable implements EntityInterface
 {
     use IdentifiableEntity;
 
@@ -22,9 +26,14 @@ class Article implements EntityInterface
     #[Column(type: Types::TEXT)]
     private string $text;
 
+    /** @var Collection<int, Comment> */
+    #[OneToMany(targetEntity: Comment::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->uuid = Uuid::v6();
+        $this->comments = new ArrayCollection();
     }
 
     public function getTitle(): string

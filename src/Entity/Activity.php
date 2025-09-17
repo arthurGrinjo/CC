@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Extension\Commentable;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\ActivityRepository;
 use Doctrine\DBAL\Types\Types;
@@ -14,14 +15,14 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: ActivityRepository::class)]
-class Activity implements EntityInterface
+class Activity extends Commentable implements EntityInterface
 {
     use IdentifiableEntity;
 
     #[Column(type: Types::STRING, length: 180)]
     private string $name;
 
-    #[ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
+    #[ManyToOne(targetEntity: User::class)]
     #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private User $user;
 

@@ -4,30 +4,49 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Trait\Numbers;
 use App\Factory\CommentFactory;
+use App\Repository\ChatRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use function Zenstruck\Foundry\Persistence\repository;
 
 class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
-    const int NUMBER_OF_OBJECTS = 250;
+    use Numbers;
+
+    public function __construct(
+        private readonly ChatRepository $chatRepository,
+    ) {}
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < self::NUMBER_OF_OBJECTS; $i++) {
-            CommentFactory::createOne();
+        $chats = $this->chatRepository->findAll();
+
+        foreach($chats as $chat) {
+            $obj = repository($chat->getEntity())->find($chat->getEntityId());
+
+            if (!method_exists($obj, 'setChat')) {
+                printf("\nError: Class %s does not extend the Commentable extension.\n\n", $chat->getEntity());
+                exit;
+            }
+
+            $obj->setChat($chat);
+            $manager->persist($obj);
+
+            CommentFactory::createRange(
+                self::COMMENTS['min'],
+                self::COMMENTS['max'],
+                ['chat' => $chat],
+            );
         }
     }
 
     public function getDependencies(): array
     {
         return [
-            ActivityFixtures::class,
-            ClubFixtures::class,
-            EventFixtures::class,
-            RouteFixtures::class,
-            UserFixtures::class,
+            ChatFixtures::class,
         ];
     }
 }

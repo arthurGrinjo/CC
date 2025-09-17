@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\Participant;
+namespace App\Dto;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
@@ -24,7 +24,7 @@ use App\Provider\Provider;
 use App\Validation\RegexValidations;
 
 #[ApiResource(
-    shortName: 'participant',
+    shortName: self::SHORT_NAME,
     stateOptions: new Options(entityClass: ParticipantEntity::class),
 )]
 #[ApiFilter(SearchFilter::class, properties: [
@@ -73,4 +73,6 @@ use App\Validation\RegexValidations;
     output: EventParticipantCollectionResponseDto::class,
     provider: Provider::class,
 )]
-final readonly class Participant {}
+final readonly class Participant {
+    const string SHORT_NAME = 'participant';
+}

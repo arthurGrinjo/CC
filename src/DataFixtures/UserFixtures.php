@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Trait\Numbers;
 use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class UserFixtures extends Fixture
 {
-    const int NUMBER_OF_OBJECTS = 50;
+    use Numbers;
     private const string PASSWORD = 'test123!';
     private const array PREDEFINED_USERS = array(
         array(
@@ -35,6 +36,6 @@ class UserFixtures extends Fixture
             UserFactory::createOne($user);
         }
 
-        UserFactory::createMany(self::NUMBER_OF_OBJECTS);
+        UserFactory::createMany(self::USERS * self::MULTIPLIER);
     }
 }

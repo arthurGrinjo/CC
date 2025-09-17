@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace App\Dto\Comment\Request;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Dto\RequestDto;
-use App\Entity\Enum\RelatedEntity;
-use App\Entity\Identifiers\UserId;
+use App\Validation\RegexValidations;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(
-    shortName: 'comment',
-    operations: [],
-)]
 class CommentRequestDto implements RequestDto
 {
-
+    #[Assert\Length(min: 3, max: 1024)]
     public string $comment;
 
-    public UserId $commenter;
+    #[Assert\Regex(RegexValidations::IRI)]
+    public string $user;
 
-    public RelatedEntity $relatedEntity;
-
-    public int $relatedId;
+    #[Assert\Regex(RegexValidations::IRI)]
+    public string $entity;
 }

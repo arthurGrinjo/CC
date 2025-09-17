@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Comment;
-use App\Entity\Enum\RelatedEntity;
 use App\Entity\User;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use function Zenstruck\Foundry\Persistence\repository;
@@ -25,16 +24,9 @@ final class CommentFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array
     {
-//        /** @var RelatedEntity $entityToComment */
-//        $entityToComment = self::faker()->randomElement(RelatedEntity::cases());
-
         return [
             'comment' => 'Comment-' . self::faker()->text(),
-            'commenter' => repository(User::class)->random(),
-            'relatedEntity' => RelatedEntity::EVENT,
-            'related' => repository(RelatedEntity::EVENT->value)->random(),
-//            'relatedEntity' => $entityToComment,
-//            'relatedId' => repository($entityToComment->value)->random()->getId(),
+            'user' => repository(User::class)->random(),
         ];
     }
 }

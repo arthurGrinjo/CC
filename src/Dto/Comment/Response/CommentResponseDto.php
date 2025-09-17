@@ -7,21 +7,28 @@ namespace App\Dto\Comment\Response;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use App\Dto\Chat\Response\ChatResponseDto;
+use App\Dto\Comment;
 use App\Dto\ResponseDto;
-use App\Entity\Comment;
-use App\Entity\Enum\RelatedEntity;
-use App\Entity\Event;
+use App\Dto\User\Response\UserResponseDto;
+use App\Entity\Comment as CommentEntity;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'comment',
+    shortName: Comment::SHORT_NAME,
     operations: [],
-    stateOptions: new Options(Comment::class),
+    stateOptions: new Options(entityClass: CommentEntity::class),
 )]
 final readonly class CommentResponseDto implements ResponseDto
 {
+    #[ApiProperty(readable: false)]
+    public function getShortName(): string
+    {
+        return Comment::SHORT_NAME;
+    }
+
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]
@@ -30,14 +37,12 @@ final readonly class CommentResponseDto implements ResponseDto
         #[SerializedName('comment'), Assert\NotBlank]
         public string $comment,
 
-        #[SerializedName('commenter'), Assert\NotBlank]
+        #[SerializedName('user'), Assert\NotBlank]
         #[ApiProperty(readableLink: true)]
-        public UserResponseDto $commenter,
+        public UserResponseDto $user,
 
-//        #[SerializedName('relatedEntity'), Assert\NotBlank]
-//        public RelatedEntity $relatedEntity,
-//
-//        #[SerializedName('related'), Assert\NotBlank]
-//        public Event $related,
+        #[SerializedName('chat')]
+        #[ApiProperty(readableLink: false)]
+        public ?ChatResponseDto $chat = null,
     ) {}
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Extension\Commentable;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,7 +16,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: EventRepository::class)]
-class Event implements EntityInterface
+class Event extends Commentable implements EntityInterface
 {
     use IdentifiableEntity;
 
@@ -27,14 +28,13 @@ class Event implements EntityInterface
     private Collection $participants;
 
     /** @var Collection<int, Comment> */
-    #[OneToMany(targetEntity: Comment::class, mappedBy: 'related', cascade: ['persist'], fetch: 'LAZY')]
+    #[OneToMany(targetEntity: Comment::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
     private Collection $comments;
 
     public function __construct()
     {
         $this->uuid = Uuid::v6();
         $this->participants = new ArrayCollection();
-        $this->comments = new ArrayCollection();
     }
 
     public function getName(): string
@@ -55,14 +55,4 @@ class Event implements EntityInterface
     {
         return $this->participants;
     }
-
-    /**
-     * @return Collection<int, Comment>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-
 }

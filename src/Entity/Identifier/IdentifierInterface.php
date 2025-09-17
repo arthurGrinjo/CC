@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity\Identifiers;
+namespace App\Entity\Identifier;
 
 interface IdentifierInterface
 {

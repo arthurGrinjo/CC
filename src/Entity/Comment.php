@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiProperty;
-use App\Entity\Enum\RelatedEntity;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
@@ -23,16 +21,13 @@ class Comment implements EntityInterface
     #[Column(type: Types::TEXT, length: 180)]
     private string $comment;
 
+    #[ManyToOne(targetEntity: Chat::class, inversedBy: 'comments')]
+    #[JoinColumn(name: 'chat_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private Chat $chat;
+
     #[ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
     #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private User $commenter;
-
-    #[Column(length: 25)]
-    private RelatedEntity $relatedEntity;
-
-    #[ManyToOne(targetEntity: Event::class, fetch: 'EAGER', inversedBy: 'comments')]
-    #[JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private Event $related;
+    private User $user;
 
     public function __construct()
     {
@@ -50,36 +45,25 @@ class Comment implements EntityInterface
         return $this;
     }
 
-    public function getCommenter(): User
+    public function getChat(): Chat
     {
-        return $this->commenter;
+        return $this->chat;
     }
 
-    public function setCommenter(User $commenter): self
+    public function setChat(Chat $chat): self
     {
-        $this->commenter = $commenter;
+        $this->chat = $chat;
         return $this;
     }
 
-    public function getRelatedEntity(): RelatedEntity
+    public function getUser(): User
     {
-        return $this->relatedEntity;
+        return $this->user;
     }
 
-    public function setRelatedEntity(RelatedEntity $relatedEntity): self
+    public function setUser(User $user): self
     {
-        $this->relatedEntity = $relatedEntity;
-        return $this;
-    }
-
-    public function getRelated(): Event
-    {
-        return $this->related;
-    }
-
-    public function setRelated(Event $related): self
-    {
-        $this->related = $related;
+        $this->user = $user;
         return $this;
     }
 }
