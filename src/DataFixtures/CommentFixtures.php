@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\DataFixtures\Trait\Numbers;
+use App\Entity\EntityInterface;
 use App\Factory\CommentFactory;
 use App\Repository\ChatRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -27,7 +28,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         foreach($chats as $chat) {
             $obj = repository($chat->getEntity())->find($chat->getEntityId());
 
-            if (!method_exists($obj, 'setChat')) {
+            if (!$obj instanceof EntityInterface || !method_exists($obj, 'setChat')) {
                 printf("\nError: Class %s does not extend the Commentable extension.\n\n", $chat->getEntity());
                 exit;
             }

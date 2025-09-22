@@ -6,7 +6,7 @@ namespace App\DataFixtures\Trait;
 
 trait Numbers
 {
-    private const int MULTIPLIER = 1;
+    public const int MULTIPLIER = 1;
     public const int ACTIVITIES = 30;
     public const int ARTICLES = 10;
 

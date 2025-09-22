@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionType;
+use Symfony\Component\ObjectMapper\Exception\RuntimeException;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -125,8 +126,12 @@ readonly class Mapper
             throw new InvalidArgumentException('No identifier found in DTO: ' . $iri);
         }
 
-        return $this->entityManager->getRepository(
-            'App\\Entity\\'. ucfirst($resource->getShortName())
-        )->findOneBy(['uuid' => $resource->uuid]);
+        /** @var class-string $entityClass */
+        $entityClass = 'App\\Entity\\'. ucfirst($resource->getShortName());
+        $entity = $this->entityManager->getRepository($entityClass)->findOneBy(['uuid' => $resource->uuid]);
+
+        return ($entity instanceof EntityInterface)
+            ? $entity
+            : throw new RuntimeException('Object nog found');
     }
 }

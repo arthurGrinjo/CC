@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Chat;
+use App\Entity\EntityInterface;
 use App\Entity\Enum\CommentableEntities;
+use RuntimeException;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use function Zenstruck\Foundry\Persistence\repository;
 
@@ -20,7 +22,7 @@ final class ChatFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string, string|int|null>
      */
     protected function defaults(): array
     {

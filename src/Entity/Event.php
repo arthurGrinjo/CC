@@ -27,10 +27,6 @@ class Event extends Commentable implements EntityInterface
     #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
     private Collection $participants;
 
-    /** @var Collection<int, Comment> */
-    #[OneToMany(targetEntity: Comment::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
-    private Collection $comments;
-
     public function __construct()
     {
         $this->uuid = Uuid::v6();

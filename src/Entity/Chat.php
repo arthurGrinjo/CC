@@ -22,6 +22,7 @@ class Chat implements EntityInterface
     #[Column(type: Types::INTEGER)]
     private int $entityId;
 
+    /** @var class-string  */
     #[Column(type: Types::STRING, length: 120)]
     private string $entity;
 
@@ -46,26 +47,29 @@ class Chat implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return class-string
+     */
     public function getEntity(): string
     {
         return $this->entity;
     }
 
+    /**
+     * @param class-string $entity
+     */
     public function setEntity(string $entity): self
     {
         $this->entity = $entity;
         return $this;
     }
 
+    /**
+     * @return Collection<int, Comment>
+     */
     public function getComments(): Collection
     {
         return $this->comments;
-    }
-
-    public function setComments(Collection $comments): self
-    {
-        $this->comments = $comments;
-        return $this;
     }
 
     public function addComment(Comment $comment): self

@@ -4,36 +4,26 @@ declare(strict_types=1);
 
 namespace App\Processor\Comment;
 
-use ApiPlatform\Doctrine\Common\State\RemoveProcessor;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\State\ProcessorInterface;
+use App\Dto\Comment\Request\CommentRequestDto;
 use App\Dto\Comment\Response\CommentResponseDto;
-use App\Dto\RequestDto;
 use App\Dto\ResponseDto;
 use App\Entity\Chat;
 use App\Entity\Comment;
 use App\Entity\EntityInterface;
 use App\Entity\Extension\Commentable;
+use App\Entity\Trait\IdentifiableEntity;
 use App\Entity\User;
 use App\Mapper\Mapper;
 use App\Processor\Validator;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use ReflectionException;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-/**
- * @template T1
- * @template T2
- *
- * @implements ProcessorInterface<T1, T2>
- */
-readonly class Processor extends Validator implements ProcessorInterface
+readonly class Processor extends Validator
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -44,11 +34,10 @@ readonly class Processor extends Validator implements ProcessorInterface
     }
 
     /**
-     * @inheritDoc
-     * @throws RuntimeException
+     * @param CommentRequestDto $data
      * @throws ReflectionException
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ResponseDto|int
+    public function process(mixed $data, Operation $operation): ResponseDto
     {
         $entityClass = ($operation->getStateOptions() instanceof Options)
             ? $operation->getStateOptions()->getEntityClass()
@@ -59,7 +48,7 @@ readonly class Processor extends Validator implements ProcessorInterface
             throw new RuntimeException('Provider: Not a valid EntityClass.');
         }
 
-        if (!$operation instanceof Post && $data instanceof RequestDto) {
+        if (!$operation instanceof Post) {
             throw new RuntimeException(sprintf('Operation not allowed: %s', $operation->getName()));
         }
 
@@ -70,7 +59,12 @@ readonly class Processor extends Validator implements ProcessorInterface
         $entity = $this->mapper->getObjectFromIri($data->entity);
         $user = $this->mapper->getObjectFromIri($data->user);
 
-        if (!$entity instanceof Commentable || !$user instanceof User) {
+        if (
+            !$entity instanceof Commentable
+            || !method_exists($entity, 'getId')
+            || !is_int($entity->getId())
+            || !$user instanceof User
+        ) {
             throw new RuntimeException('error!');
         }
 

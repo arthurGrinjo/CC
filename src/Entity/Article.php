@@ -26,14 +26,9 @@ class Article extends Commentable implements EntityInterface
     #[Column(type: Types::TEXT)]
     private string $text;
 
-    /** @var Collection<int, Comment> */
-    #[OneToMany(targetEntity: Comment::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
-    private Collection $comments;
-
     public function __construct()
     {
         $this->uuid = Uuid::v6();
-        $this->comments = new ArrayCollection();
     }
 
     public function getTitle(): string
