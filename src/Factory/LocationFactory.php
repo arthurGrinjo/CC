@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Club;
+use App\Entity\Location;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Club>
+ * @extends PersistentProxyObjectFactory<Location>
  */
-final class ClubFactory extends PersistentProxyObjectFactory
+final class LocationFactory extends PersistentProxyObjectFactory
 {
     public static function class(): string
     {
-        return Club::class;
+        return Location::class;
     }
 
     /**
@@ -23,7 +23,7 @@ final class ClubFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
-            'name' => 'Club-' . self::faker()->text(20),
+            'name' => 'Location-' . self::faker()->text(20),
         ];
     }
 }

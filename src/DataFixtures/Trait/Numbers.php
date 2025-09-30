@@ -17,6 +17,8 @@ trait Numbers
     public const array COMMENTS = ['min' => 3, 'max' => 20];
     public const int EVENTS = 5;
     public const int GEARS = 10;
+
+    public const int LOCATIONS = 10;
     public const int MEMBERS = 10;
     public const int PARTICIPANTS = 20;
     public const int ROUTES = 20;
