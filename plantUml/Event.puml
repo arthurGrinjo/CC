@@ -1,19 +1,34 @@
 @startuml
 
+entity Event {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    name: string
+    startDatetime: datetime
+    endDatetime: datetime
+    location: <<Location>>
+}
+
+entity Location {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+}
+
+entity Participant {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    userId: <<User>>
+    eventId: <<Event>>
+    role: <<ParticipantRole>>
+}
+
 entity User {
     id: int <<generated>>
     uuid: uuid <<generated>>
     email: string
-    password
 }
 
-entity Role {
-    *id : number <<generated>>
-    *uuid : uuid <<generated>>
-}
-
-User }|..|| Role
-'Entity03 }o..o| Entity04
-'Entity05 ||--o{ Entity06
-'Entity07 |o--|| Entity08
+Event ||..|| Location
+Participant }|..|| Event
+User ||..|{ Participant
 @enduml

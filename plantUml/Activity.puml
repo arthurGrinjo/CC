@@ -1,0 +1,30 @@
+@startuml
+
+entity Activity {
+    id: int <<unique>>
+    uuid: uuid <<unique>>
+    name: string
+    startLocation: <<Location>>
+}
+
+entity Location {
+    id: int <<unique>>
+    uuid: uuid <<unique>>
+    name: string
+    address: string
+    town: string
+    'latitude: decimal(8,6)
+    'longitude: decimal(9,6)
+}
+
+entity User {
+    id: int <<unique>>
+    uuid: uuid <<unique>>
+    email: email <<unique>>
+    firstname: string
+    lastname: string
+}
+
+Activity }|..|{ Location
+Activity }|..|| User
+@enduml

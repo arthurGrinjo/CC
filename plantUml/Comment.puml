@@ -1,0 +1,65 @@
+@startuml
+
+entity Activity {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    name: string
+    etc: ...
+}
+
+entity Article {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    name: string
+    etc: ...
+}
+
+entity Chat {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    entityId: int
+    entity: <<class-string>>
+}
+
+entity Comment {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    comment: string
+    chatId: <<Chat>>
+    userId: <<User>>
+}
+
+entity Event {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    name: string
+    etc: ...
+}
+
+entity Route {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    name: string
+    etc: ...
+}
+
+entity User {
+    id: int <<generated>>
+    uuid: uuid <<generated>>
+    email: string
+}
+
+note left of Chat
+  Chat is implemented with class
+  extension Commentable.
+  Class must be added to
+  CommentableEntities.
+end note
+
+Chat ||..|{ Comment
+Chat ||..|| Activity
+Chat ||..|| Article
+Chat ||..|| Event
+Chat ||..|| Route
+Comment }|..|| User
+@enduml
