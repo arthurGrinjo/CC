@@ -32,7 +32,7 @@ final readonly class ArticleCollectionResponseDto implements ResponseDto
         #[ApiProperty(readable: false, identifier: true)]
         public Uuid $uuid,
 
-        #[SerializedName('name'), Assert\NotBlank]
-        public string $name,
+        #[SerializedName('title'), Assert\NotBlank]
+        public string $title,
     ) {}
 }
