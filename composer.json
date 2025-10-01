@@ -24,7 +24,7 @@
         "symfony/expression-language": "*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "*",
-        "symfony/object-mapper": "7.3.*",
+        "symfony/object-mapper": "7.4.*",
         "symfony/property-access": "7.3.*",
         "symfony/property-info": "*",
         "symfony/runtime": "*",
@@ -76,7 +76,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.3.*"
+            "require": "7.4.*"
         }
     },
     "require-dev": {

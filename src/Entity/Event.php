@@ -7,11 +7,15 @@ namespace App\Entity;
 use App\Entity\Extension\Commentable;
 use App\Entity\Trait\IdentifiableEntity;
 use App\Repository\EventRepository;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
@@ -22,6 +26,16 @@ class Event extends Commentable implements EntityInterface
 
     #[Column(type: Types::STRING, length: 180)]
     private string $name;
+
+    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $startDatetime;
+
+    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $endDatetime;
+
+    #[ManyToOne(targetEntity: Location::class, fetch: 'EAGER')]
+    #[JoinColumn(referencedColumnName: 'id', nullable: true)]
+    private ?Location $location = null;
 
     /** @var Collection<int, Participant> */
     #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
@@ -42,6 +56,51 @@ class Event extends Commentable implements EntityInterface
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function getStartDatetime(): DateTimeImmutable
+    {
+        return $this->startDatetime;
+    }
+
+    public function setStartDatetime(DateTimeImmutable $startDatetime): self
+    {
+        $this->startDatetime = $startDatetime;
+        return $this;
+    }
+
+    public function getEndDatetime(): DateTimeImmutable
+    {
+        return $this->endDatetime;
+    }
+
+    public function setEndDatetime(DateTimeImmutable $endDatetime): self
+    {
+        $this->endDatetime = $endDatetime;
+        return $this;
+    }
+
+    public function getDuration(): DateInterval
+    {
+        return $this->getStartDatetime()->diff(
+            $this->getEndDatetime()
+        );
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): self
+    {
+        $this->location = $location;
+        return $this;
+    }
+
+    public function getNumberOfParticipants(): int
+    {
+        return count($this->getParticipants());
     }
 
     /**

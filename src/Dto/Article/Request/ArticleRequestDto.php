@@ -10,5 +10,5 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ArticleRequestDto implements RequestDto
 {
     #[Assert\Length(min: 0, max: 120)]
-    public string $name;
+    public string $title;
 }
