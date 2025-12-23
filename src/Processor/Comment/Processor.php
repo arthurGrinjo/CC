@@ -7,27 +7,27 @@ namespace App\Processor\Comment;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Symfony\Routing\IriConverter;
 use App\Dto\Comment\Request\CommentRequestDto;
 use App\Dto\Comment\Response\CommentResponseDto;
 use App\Dto\ResponseDto;
 use App\Entity\Chat;
 use App\Entity\Comment;
-use App\Entity\EntityInterface;
 use App\Entity\Extension\Commentable;
-use App\Entity\Trait\IdentifiableEntity;
 use App\Entity\User;
-use App\Mapper\Mapper;
 use App\Processor\Validator;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionException;
 use RuntimeException;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class Processor extends Validator
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private Mapper $mapper,
+        private IriConverter $iriConverter,
+        private ObjectMapperInterface $objectMapper,
         protected ValidatorInterface $validator,
     ) {
         parent::__construct($validator);
@@ -56,15 +56,17 @@ readonly class Processor extends Validator
 
         /** todo: Prevent from reposting comments within certain time.  */
 
-        $entity = $this->mapper->getObjectFromIri($data->entity);
-        $user = $this->mapper->getObjectFromIri($data->user);
+        $entity = $this->iriConverter->getResourceFromIri($data->entity);
+        /** @var User $user */
+        $user = $this->iriConverter->getResourceFromIri($data->user);
 
         if (
-            !$entity instanceof Commentable
-            || !method_exists($entity, 'getId')
-            || !is_int($entity->getId())
-            || !$user instanceof User
+            $entity instanceof Commentable
+            && method_exists($entity, 'getId')
+            && is_int($entity->getId())
+            && $user instanceof User
         ) {
+            /** todo: Personalize this error!! */
             throw new RuntimeException('error!');
         }
 
@@ -87,8 +89,8 @@ readonly class Processor extends Validator
         /** Save chat, comment, commented entity */
         $this->entityManager->flush();
 
-        return $this->mapper->entityToDto(
-            entity: $comment,
+        return $this->objectMapper->map(
+            source: $comment,
             target: CommentResponseDto::class,
         );
     }

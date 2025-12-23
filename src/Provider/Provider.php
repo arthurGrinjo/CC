@@ -13,12 +13,14 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\EntityInterface;
-use App\Mapper\Mapper;
+use App\Entity\Event;
+use App\Entity\Location;
+use App\Repository\EventRepository;
 use ArrayIterator;
 use Doctrine\ORM\EntityNotFoundException;
 use InvalidArgumentException;
-use ReflectionException;
 use RuntimeException;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
@@ -29,9 +31,10 @@ use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 final readonly class Provider implements ProviderInterface
 {
     public function __construct(
-        private CollectionProvider $collectionProvider,
-        private ItemProvider       $itemProvider,
-        private Mapper             $mapper,
+        private CollectionProvider      $collectionProvider,
+        private ItemProvider            $itemProvider,
+        private ObjectMapperInterface   $objectMapper,
+        private EventRepository         $eventRepository,
     ){}
 
     /**
@@ -69,7 +72,10 @@ final readonly class Provider implements ProviderInterface
                         throw new EntityNotFoundException('Entity not found: ' . serialize($object));
                     }
 
-                    $data[] = $this->mapper->entityToDto(entity: $object, target: $output['class']);
+                    $data[] = $this->objectMapper->map(
+                        source: $object,
+                        target: $output['class']
+                    );
                 }
 
                 return ($objects instanceof Paginator)
@@ -86,13 +92,12 @@ final readonly class Provider implements ProviderInterface
             $object = $this->itemProvider->provide($operation, $uriVariables, $context);
 
             return ($object instanceof $entityClass)
-                ? $this->mapper->entityToDto(entity: $object, target: $output['class'])
+                ? $this->objectMapper->map(source: $object, target: $output['class'])
                 : throw new EntityNotFoundException('Entity not found: ' . serialize($object));
         } catch (
             AccessException
             | EntityNotFoundException
             | InvalidArgumentException
-            | ReflectionException
             | RuntimeException
             | UnexpectedTypeException $e
         ) {

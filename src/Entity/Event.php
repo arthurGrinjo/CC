@@ -20,26 +20,26 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Uid\Uuid;
 
 #[Entity(repositoryClass: EventRepository::class)]
-class Event extends Commentable implements EntityInterface
+final class Event extends Commentable implements EntityInterface
 {
     use IdentifiableEntity;
 
     #[Column(type: Types::STRING, length: 180)]
-    private string $name;
+    public string $name;
 
     #[Column(type: Types::DATETIME_IMMUTABLE)]
-    private DateTimeImmutable $startDatetime;
+    public DateTimeImmutable $startDatetime;
 
     #[Column(type: Types::DATETIME_IMMUTABLE)]
-    private DateTimeImmutable $endDatetime;
+    public DateTimeImmutable $endDatetime;
 
-    #[ManyToOne(targetEntity: Location::class, fetch: 'EAGER')]
+    #[ManyToOne(targetEntity: Location::class)]
     #[JoinColumn(referencedColumnName: 'id', nullable: true)]
-    private ?Location $location = null;
+    public ?Location $location;
 
     /** @var Collection<int, Participant> */
     #[OneToMany(targetEntity: Participant::class, mappedBy: 'event', cascade: ['persist'], fetch: 'LAZY')]
-    private Collection $participants;
+    public Collection $participants;
 
     public function __construct()
     {
@@ -47,67 +47,15 @@ class Event extends Commentable implements EntityInterface
         $this->participants = new ArrayCollection();
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    public function getStartDatetime(): DateTimeImmutable
-    {
-        return $this->startDatetime;
-    }
-
-    public function setStartDatetime(DateTimeImmutable $startDatetime): self
-    {
-        $this->startDatetime = $startDatetime;
-        return $this;
-    }
-
-    public function getEndDatetime(): DateTimeImmutable
-    {
-        return $this->endDatetime;
-    }
-
-    public function setEndDatetime(DateTimeImmutable $endDatetime): self
-    {
-        $this->endDatetime = $endDatetime;
-        return $this;
-    }
-
     public function getDuration(): DateInterval
     {
-        return $this->getStartDatetime()->diff(
-            $this->getEndDatetime()
+        return $this->startDatetime->diff(
+            $this->endDatetime,
         );
-    }
-
-    public function getLocation(): ?Location
-    {
-        return $this->location;
-    }
-
-    public function setLocation(?Location $location): self
-    {
-        $this->location = $location;
-        return $this;
     }
 
     public function getNumberOfParticipants(): int
     {
-        return count($this->getParticipants());
-    }
-
-    /**
-     * @return Collection<int, Participant>
-     */
-    public function getParticipants(): Collection
-    {
-        return $this->participants;
+        return count($this->participants);
     }
 }

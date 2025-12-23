@@ -14,7 +14,6 @@ use ApiPlatform\State\ProcessorInterface;
 use App\Dto\RequestDto;
 use App\Dto\ResponseDto;
 use App\Entity\EntityInterface;
-use App\Mapper\Mapper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use ReflectionException;
@@ -22,6 +21,7 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -37,7 +37,7 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
      */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private Mapper $mapper,
+        private ObjectMapperInterface $objectMapper,
         #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
         private ProcessorInterface $persistProcessor,
         private RemoveProcessor $removeProcessor,
@@ -77,11 +77,12 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
     }
 
     /**
-     * @param T1 $data
      * @param class-string $entityClass
+     * @param T1 $data
+     * @param Operation $operation
      * @param array<string, mixed> $uriVariables
      * @param array<string, mixed>&array{request?: Request, previous_data?: mixed, resource_class?: string|null, original_data?: mixed} $context
-     * @throws RuntimeException
+     * @return ResponseDto
      */
     private function updateOrCreate(
         string $entityClass,
@@ -91,35 +92,40 @@ readonly class StandardProcessor extends Validator implements ProcessorInterface
         array $context,
     ): ResponseDto {
         try {
-            $entity = null;
+            $entity = $response = null;
             if ($operation instanceof Post) {
                 $entity = new $entityClass;
             }
 
             if ($operation instanceof Put) {
-                $repo = $this->entityManager->getRepository($entityClass);
-                $entity = $repo->findOneBy($uriVariables);
+                $repository = $this->entityManager->getRepository($entityClass);
+                $entity = $repository->findOneBy($uriVariables);
             }
 
             ($data instanceof RequestDto && $entity instanceof EntityInterface)
-                ? $this->mapper->merge(
-                    dto: $data,
-                    entity: $entity,
+                ? $this->objectMapper->map(
+                    source: $data,
+                    target: $entity,
                 )
                 : throw new ReflectionException('Invalid input dto.')
             ;
 
-            return (
+
+          if (
                 is_array($operation->getOutput())
                 && array_key_exists('class', $operation->getOutput())
                 && is_string($operation->getOutput()['class'])
                 && class_exists($operation->getOutput()['class'])
-            )
-                ? $this->mapper->entityToDto(
-                    entity: $this->persistProcessor->process($entity, $operation, $uriVariables, $context),
-                    target: $operation->getOutput()['class'],
-                )
-                : throw new RuntimeException('Invalid output class, create: ' . $entityClass)
+          ) {
+              $response = $this->objectMapper->map(
+                  source: $this->persistProcessor->process($entity, $operation, $uriVariables, $context),
+                  target: $operation->getOutput()['class']
+              );
+          }
+
+          return ($response instanceof ResponseDto)
+              ? $response
+              : throw new RuntimeException('Invalid output class, create: ' . $entityClass)
             ;
         } catch (InvalidMagicMethodCall|ReflectionException|RuntimeException $e) {
             throw new RuntimeException($e->getMessage(), $e->getCode());

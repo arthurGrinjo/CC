@@ -13,20 +13,10 @@ trait IdentifiableEntity
     #[ORM\Id, ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[ApiProperty(readable: false, writable: false, identifier: false)]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(readable: false, writable: false, identifier: true)]
-    private Uuid $uuid;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getUuid(): Uuid
-    {
-        return $this->uuid;
-    }
+    public Uuid $uuid;
 }
 

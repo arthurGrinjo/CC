@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Dto\Location;
 use App\Dto\ResponseDto;
 use App\Entity\Location as LocationEntity;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [],
     stateOptions: new Options(entityClass: LocationEntity::class),
 )]
+#[Map(source: LocationEntity::class)]
 final readonly class LocationCollectionResponseDto implements ResponseDto
 {
     #[ApiProperty(readable: false)]

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Dto\User\Request;
 
 use App\Dto\RequestDto;
+use App\Entity\User;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[Map(target: User::class)]
 class UserRequestDto implements RequestDto
 {
     #[Assert\Email]

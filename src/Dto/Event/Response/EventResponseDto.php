@@ -11,7 +11,9 @@ use App\Dto\Event;
 use App\Dto\Location\Response\LocationResponseDto;
 use App\Dto\ResponseDto;
 use App\Entity\Event as EventEntity;
+use App\Entity\Location;
 use DateTimeImmutable;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -23,14 +25,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [],
     stateOptions: new Options(entityClass: EventEntity::class),
 )]
+#[Map(source: EventEntity::class)]
 final readonly class EventResponseDto implements ResponseDto
 {
-    #[ApiProperty(readable: false)]
-    public function getShortName(): string
-    {
-        return Event::SHORT_NAME;
-    }
-
     public function __construct(
         #[SerializedName('uuid'), Assert\NotBlank]
         #[ApiProperty(readable: false, identifier: true)]
@@ -50,7 +47,7 @@ final readonly class EventResponseDto implements ResponseDto
         public DateTimeImmutable $endDatetime,
 
         #[SerializedName('participants'), Assert\NotBlank]
-        public int $numberOfParticipants,
+        public ?int $numberOfParticipants,
 
         #[SerializedName('location')]
         #[ApiProperty(readableLink: true)]
